@@ -1,8 +1,10 @@
 import * as React from 'react';
+import * as fs from 'fs';
 import Arweave from 'arweave';
 import { BlockData } from 'arweave/node/blocks';
 import { Button } from '@mui/material';
 import TextField from '@mui/material/TextField';
+import Transaction from 'arweave/node/lib/transaction';
 
 interface LongOutputProps {
     value: string
@@ -31,15 +33,17 @@ interface HelloArweaveProps {
 
 interface HelloArweaveState {
     arweave: Arweave,
-    block: BlockData | undefined
+    block: BlockData | null,
+    transaction: Transaction | null,
 }
 
 class HelloArweave extends React.Component<HelloArweaveProps, HelloArweaveState> {
     constructor(props: HelloArweaveProps) {
         super(props);
         this.state = {
-            arweave: Arweave.init({host: 'arweave.net'}),
-            block: undefined
+            arweave: Arweave.init({ host: 'arweave.net' }),
+            block: null,
+            transaction: null,
         }
     }
 
@@ -49,6 +53,21 @@ class HelloArweave extends React.Component<HelloArweaveProps, HelloArweaveState>
         }, (error) => {
             console.log('error :>> ', error);
         });
+    }
+
+    createArweaveTransaction = async () => {
+        let key = await this.state.arweave.wallets.generate();
+        let data = fs.readFileSync('');
+        // Plain text
+        let transaction = await this.state.arweave.createTransaction({
+            data: data
+        }, key);
+
+        transaction.addTag('myTagName', 'myTagContent');
+
+        await this.state.arweave.transactions.sign(transaction, key);
+
+        this.setState({ transaction });
     }
 
     render() {
@@ -63,6 +82,12 @@ class HelloArweave extends React.Component<HelloArweaveProps, HelloArweaveState>
                     Get current block
                 </Button>
                 <LongOutput value={JSON.stringify(this.state.block)} />
+                <h3>Current block:</h3>
+                <Button variant="contained" onClick={this.createArweaveTransaction}>
+                    Create a new transaction
+                </Button>
+                <p>Transaction:</p>
+                <LongOutput value={JSON.stringify(this.state.transaction)} />
                 <hr />
             </>
         );
