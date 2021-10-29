@@ -38,7 +38,7 @@ class HelloArweave extends React.Component<HelloArweaveProps, HelloArweaveState>
     constructor(props: HelloArweaveProps) {
         super(props);
         this.state = {
-            arweave: Arweave.init({}),
+            arweave: Arweave.init({host: 'arweave.net'}),
             block: undefined
         }
     }
