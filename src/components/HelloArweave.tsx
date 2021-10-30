@@ -52,6 +52,13 @@ class HelloArweave extends React.Component<HelloArweaveProps, HelloArweaveState>
         }
     }
 
+    componentDidMount() {
+        const apiUrl = 'http://localhost:6060/arweave';
+        fetch(apiUrl)
+          .then((response) => response.json())
+          .then((data) => console.log('This is your data', data));
+      }
+
     getCurrentArweaveBlock = async () => {
         this.state.arweave.blocks.getCurrent().then((res) => {
             this.setState({ block: res });
