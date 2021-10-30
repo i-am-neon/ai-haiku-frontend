@@ -6,6 +6,9 @@ import { Button } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Transaction from 'arweave/node/lib/transaction';
 
+import dogePicture from '../assets/doge.jpg';
+import { TransactionStatusResponse } from 'arweave/node/transactions';
+
 interface LongOutputProps {
     value: string
 }
@@ -35,6 +38,7 @@ interface HelloArweaveState {
     arweave: Arweave,
     block: BlockData | null,
     transaction: Transaction | null,
+    transactionStatus: TransactionStatusResponse | null
 }
 
 class HelloArweave extends React.Component<HelloArweaveProps, HelloArweaveState> {
@@ -44,6 +48,7 @@ class HelloArweave extends React.Component<HelloArweaveProps, HelloArweaveState>
             arweave: Arweave.init({ host: 'arweave.net' }),
             block: null,
             transaction: null,
+            transactionStatus: null
         }
     }
 
@@ -56,18 +61,32 @@ class HelloArweave extends React.Component<HelloArweaveProps, HelloArweaveState>
     }
 
     createArweaveTransaction = async () => {
-        let key = await this.state.arweave.wallets.generate();
-        let data = fs.readFileSync('');
-        // Plain text
-        let transaction = await this.state.arweave.createTransaction({
-            data: data
-        }, key);
+        const arweave = this.state.arweave;
+        let key = await arweave.wallets.generate();
 
-        transaction.addTag('myTagName', 'myTagContent');
+        let transaction = await arweave.createTransaction({ data: dogePicture }, key);
+        transaction.addTag('Content-Type', 'application/jpg');
 
-        await this.state.arweave.transactions.sign(transaction, key);
+        await arweave.transactions.sign(transaction, key);
+
+        let uploader = await arweave.transactions.getUploader(transaction);
+
+        while (!uploader.isComplete) {
+            await uploader.uploadChunk();
+            console.log(`${uploader.pctComplete}% complete, ${uploader.uploadedChunks}/${uploader.totalChunks}`);
+        }
 
         this.setState({ transaction });
+    }
+
+    getTransactionStatus = async (txnId: string | undefined) => {
+        if (!txnId) {
+            return;
+        }
+        
+        const status = await this.state.arweave.transactions.getStatus(txnId);
+
+        this.setState({ transactionStatus: status });
     }
 
     render() {
@@ -82,12 +101,17 @@ class HelloArweave extends React.Component<HelloArweaveProps, HelloArweaveState>
                     Get current block
                 </Button>
                 <LongOutput value={JSON.stringify(this.state.block)} />
-                <h3>Current block:</h3>
+                <h3>Transaction:</h3>
                 <Button variant="contained" onClick={this.createArweaveTransaction}>
                     Create a new transaction
                 </Button>
                 <p>Transaction:</p>
                 <LongOutput value={JSON.stringify(this.state.transaction)} />
+                <Button variant="contained" onClick={() => this.getTransactionStatus(this.state.transaction?.id)}>
+                    Get the status of that transaction
+                </Button>
+                <p>Transaction:</p>
+                <LongOutput value={JSON.stringify(this.state.transactionStatus)} />
                 <hr />
             </>
         );
