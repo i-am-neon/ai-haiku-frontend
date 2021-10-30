@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as fs from 'fs';
 import Arweave from 'arweave';
 import { BlockData } from 'arweave/node/blocks';
 import { Button } from '@mui/material';
@@ -53,11 +52,24 @@ class HelloArweave extends React.Component<HelloArweaveProps, HelloArweaveState>
     }
 
     componentDidMount() {
-        const apiUrl = 'http://localhost:6060/arweave';
-        fetch(apiUrl)
-          .then((response) => response.json())
-          .then((data) => console.log('This is your data', data));
-      }
+        // const apiUrl = 'http://localhost:6060/arweave';
+        const apiUrl = 'https://eth-arweave-base-generator.herokuapp.com/arweave';
+        const formData = new FormData();
+        formData.append('data', 'hi from react ✌🏻');
+        const data = {
+            "data": "hi from react ✌🏻"
+        }
+        fetch(apiUrl, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then((response) => response.json())
+            .then((data) => console.log('This is your data', data));
+    }
 
     getCurrentArweaveBlock = async () => {
         this.state.arweave.blocks.getCurrent().then((res) => {
@@ -90,7 +102,7 @@ class HelloArweave extends React.Component<HelloArweaveProps, HelloArweaveState>
         if (!txnId) {
             return;
         }
-        
+
         const status = await this.state.arweave.transactions.getStatus(txnId);
 
         this.setState({ transactionStatus: status });
