@@ -1,10 +1,21 @@
+import React, { Suspense, lazy } from 'react';
 import './App.css';
-import Web3Connection from './web3/Web3Connection';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import Home from './components/Home';
+
+const Web3Connection = lazy(() => import('./web3/Web3Connection'));
 
 function App() {
   return (
     <div className="App">
-      <Web3Connection />
+      <BrowserRouter>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Switch>
+            <Route path='/mint' component={Web3Connection}></Route>
+            <Route path='/' component={Home}></Route>
+          </Switch>
+        </Suspense>
+      </BrowserRouter>
     </div>
   );
 }
