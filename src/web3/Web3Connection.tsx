@@ -8,7 +8,7 @@ import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 // @ts-ignore
 import Fortmatic from "fortmatic";
-import Torus from "@toruslabs/torus-embed";
+// import Torus from "@toruslabs/torus-embed";
 import Authereum from "authereum";
 import { Bitski } from "bitski";
 
@@ -239,9 +239,9 @@ class Web3Connection extends React.Component<any, any> {
           infuraId: process.env.REACT_APP_INFURA_ID
         }
       },
-      torus: {
-        package: Torus
-      },
+      // torus: {
+      //   package: Torus
+      // },
       fortmatic: {
         package: Fortmatic,
         options: {
