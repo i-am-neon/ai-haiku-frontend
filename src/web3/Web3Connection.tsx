@@ -12,6 +12,9 @@ import Torus from "@toruslabs/torus-embed";
 import Authereum from "authereum";
 import { Bitski } from "bitski";
 
+import axios from 'axios'
+import { ethers } from 'ethers'
+
 import Button from "./components/Button";
 import Column from "./components/Column";
 import Wrapper from "./components/Wrapper";
@@ -385,7 +388,7 @@ class Web3Connection extends React.Component<any, any> {
     }
 
     // test message
-    const message = "My email is john@doe.com - 1537836206101";
+    const message = await axios.get('http://localhost:6060/nonce/' + address).then(res => res.data.message);
 
     // encode message (hex)
     const hexMsg = convertUtf8ToHex(message);
@@ -399,6 +402,12 @@ class Web3Connection extends React.Component<any, any> {
 
       // send message
       const result = await web3.eth.personal.sign(hexMsg, address);
+
+      // trying out auth on server
+      await axios.post('http://localhost:6060/login', {
+        address: address,
+        signature: result,
+      })
 
       // verify signature
       const signer = recoverPersonalSignature(result, message);
