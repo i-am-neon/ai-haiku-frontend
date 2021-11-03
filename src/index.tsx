@@ -3,6 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+if (!process.env.REACT_APP_GENERATOR_URL_BASE) {
+  throw new Error("Please add env variables.");
+}
 
 // @ts-ignore
 declare global {

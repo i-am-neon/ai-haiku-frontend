@@ -29,6 +29,7 @@
     "axios": "^0.24.0",
     "bitski": "^0.11.0-beta.5",
     "blockies-ts": "^1.0.0",
+    "dotenv": "^10.0.0",
     "ethereumjs-util": "^7.1.3",
     "ethers": "^5.5.1",
     "fortmatic": "^2.2.1",

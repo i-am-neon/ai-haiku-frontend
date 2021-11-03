@@ -388,7 +388,7 @@ class Web3Connection extends React.Component<any, any> {
     }
 
     // test message
-    const message = await axios.get('http://localhost:6060/nonce/' + address).then(res => res.data.message);
+    const message = await axios.get(process.env.REACT_APP_GENERATOR_URL_BASE + 'nonce/' + address).then(res => res.data.message);
 
     // encode message (hex)
     const hexMsg = convertUtf8ToHex(message);
@@ -404,7 +404,7 @@ class Web3Connection extends React.Component<any, any> {
       const result = await web3.eth.personal.sign(hexMsg, address);
 
       // trying out auth on server
-      await axios.post('http://localhost:6060/login', {
+      await axios.post(process.env.REACT_APP_GENERATOR_URL_BASE + 'login', {
         address: address,
         signature: result,
       })
