@@ -2340,7 +2340,7 @@
     keccak "^3.0.2"
     randombytes "^2.1.0"
 
-"@toruslabs/torus-embed@^1.1.1":
+"@toruslabs/torus-embed@^1.1.1", "@toruslabs/torus-embed@^1.13.7":
   version "1.13.7"
   resolved "https://registry.yarnpkg.com/@toruslabs/torus-embed/-/torus-embed-1.13.7.tgz#48480f5d66c30dfea1a7477b7d9dfbbf1e18d994"
   integrity sha512-xwSYH0WtM8TZfqzL3PgHtZEtu5CD0xS3pxtKmCJNAEZFlhPXJ4FEf83ZGPu/hTUJuaQPizDRJESQ2fdYhfwIiw==
