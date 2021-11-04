@@ -387,17 +387,12 @@ class Web3Connection extends React.Component<any, any> {
       return;
     }
 
-    console.log("process.env.REACT_APP_GENERATOR_URL_BASE + 'nonce/' + address :>> ", process.env.REACT_APP_GENERATOR_URL_BASE + 'nonce/' + address);
-
     // test message
-    const message = await axios.get(process.env.REACT_APP_GENERATOR_URL_BASE + 'nonce/' + address).then(res => {
-      console.log('res :>> ', res);
-      return res.data.message
-    });
-    console.log('message :>> ', message);
+    const message = await axios.get(process.env.REACT_APP_GENERATOR_URL_BASE + 'nonce/' + address).then(res => res.data.message);
+
     // encode message (hex)
     const hexMsg = convertUtf8ToHex(message ?? '');
-    console.log('hexMsg :>> ', hexMsg);
+
     try {
       // open modal
       this.toggleModal();
