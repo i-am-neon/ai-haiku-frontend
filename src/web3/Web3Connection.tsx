@@ -391,7 +391,7 @@ class Web3Connection extends React.Component<any, any> {
     const message = await axios.get(process.env.REACT_APP_GENERATOR_URL_BASE + 'nonce/' + address).then(res => res.data.message);
 
     // encode message (hex)
-    const hexMsg = convertUtf8ToHex(message);
+    const hexMsg = convertUtf8ToHex(message ?? '');
 
     try {
       // open modal
