@@ -27,6 +27,7 @@ declare global {
 
 ReactDOM.render(
   <React.StrictMode>
+    <p>{process.env.REACT_APP_GENERATOR_URL_BASE}</p>
     <App />
   </React.StrictMode>,
   document.getElementById('root')
