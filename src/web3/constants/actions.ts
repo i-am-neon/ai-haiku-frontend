@@ -1,6 +1,7 @@
 export const ETH_SEND_TRANSACTION = 'eth.sendTransaction()'
 export const ETH_SIGN = 'eth.sign()'
 export const PERSONAL_SIGN = '🗝 sign auth message 🗝'
+export const GET_ARWEAVE = '🤑 Get dat AR bish 🤑'
 export const BOX_GET_PROFILE = 'box.getProfile()'
 export const DAI_BALANCE_OF = 'dai.balanceOf()'
 export const DAI_TRANSFER = 'dai.transfer()'

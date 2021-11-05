@@ -42,7 +42,8 @@ import {
   PERSONAL_SIGN,
   BOX_GET_PROFILE,
   DAI_BALANCE_OF,
-  DAI_TRANSFER
+  DAI_TRANSFER,
+  GET_ARWEAVE
 } from "./constants";
 import { callBalanceOf, callTransfer } from "./helpers/web3";
 
@@ -380,6 +381,45 @@ class Web3Connection extends React.Component<any, any> {
     }
   };
 
+  public getArweave = async () => {
+    const { web3, address } = this.state;
+
+    if (!web3) {
+      return;
+    }
+
+    try {
+      // open modal
+      this.toggleModal();
+
+      // toggle pending request indicator
+      this.setState({ pendingRequest: true });
+
+      const token = sessionStorage.getItem('token') ?? '';
+
+      const result = await axios.get(
+        process.env.REACT_APP_GENERATOR_URL_BASE + 'arweave',
+        { headers: { "X-JWT-Token": token } })
+        .then(res => res);
+
+      // format displayed result
+      const formattedResult = {
+        action: GET_ARWEAVE,
+        result
+      };
+
+      // display result
+      this.setState({
+        web3,
+        pendingRequest: false,
+        result: formattedResult || null
+      });
+    } catch (error) {
+      console.error(error); // tslint:disable-line
+      this.setState({ web3, pendingRequest: false, result: null });
+    }
+  };
+
   public testSignPersonalMessage = async () => {
     const { web3, address } = this.state;
 
@@ -407,7 +447,8 @@ class Web3Connection extends React.Component<any, any> {
       await axios.post(process.env.REACT_APP_GENERATOR_URL_BASE + 'login', {
         address: address,
         signature: result,
-      })
+      }).then(res => sessionStorage.setItem('token', res.data.token))
+        .catch(err => console.error('error occurred while logging in.'));
 
       // verify signature
       const signer = recoverPersonalSignature(result, message);
@@ -583,18 +624,22 @@ class Web3Connection extends React.Component<any, any> {
                 <h3>Actions</h3>
                 <Column center>
                   <STestButtonContainer>
-                    <STestButton left onClick={this.testSendTransaction}>
+                    {/* <STestButton left onClick={this.testSendTransaction}>
                       {ETH_SEND_TRANSACTION}
                     </STestButton>
 
                     <STestButton left onClick={this.testSignMessage}>
                       {ETH_SIGN}
-                    </STestButton>
+                    </STestButton> */}
 
                     <STestButton left onClick={this.testSignPersonalMessage}>
                       {PERSONAL_SIGN}
                     </STestButton>
-                    <STestButton
+
+                    <STestButton left onClick={this.getArweave}>
+                      {GET_ARWEAVE}
+                    </STestButton>
+                    {/* <STestButton
                       left
                       onClick={() => this.testContractCall(DAI_BALANCE_OF)}
                     >
@@ -610,7 +655,7 @@ class Web3Connection extends React.Component<any, any> {
 
                     <STestButton left onClick={this.testOpenBox}>
                       {BOX_GET_PROFILE}
-                    </STestButton>
+                    </STestButton> */}
                   </STestButtonContainer>
                 </Column>
                 <h3>Balances</h3>
