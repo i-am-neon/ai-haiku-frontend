@@ -535,14 +535,15 @@ class Web3Connection extends React.Component<any, any> {
       // trying out auth on server
       const statusObject = await axios.get(
         process.env.REACT_APP_GENERATOR_URL_BASE + 'arweave/status/' + lastTxn
-      ).then(res => res.data)
+      ).then(res => res.data.status)
         .catch(err => console.error('error occurred while getting image from Arweave.'));
 
+        console.log('statusObject.status :>> ', statusObject.status);
       // format displayed result
       const formattedResult = {
         action: GET_STATUS_FROM_TXN,
-        status: statusObject.status ?? '',
-        confirmed: statusObject.confirmed ?? '' // confirmed comes back as null if there are no confirmations yet.
+        status: statusObject.status,
+        confirmed: statusObject.confirmed ?? 'null' // an unconfirmed status comes back null for confirmed.
       };
 
 
