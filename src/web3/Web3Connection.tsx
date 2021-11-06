@@ -541,7 +541,8 @@ class Web3Connection extends React.Component<any, any> {
       // format displayed result
       const formattedResult = {
         action: GET_STATUS_FROM_TXN,
-        status: statusObject
+        status: statusObject.status ?? '',
+        confirmed: statusObject.confirmed ?? '' // confirmed comes back as null if there are no confirmations yet.
       };
 
 
