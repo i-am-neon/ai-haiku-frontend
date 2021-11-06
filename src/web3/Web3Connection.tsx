@@ -31,8 +31,7 @@ import {
   recoverPublicKey,
   recoverPersonalSignature,
   formatTestTransaction,
-  getChainData,
-  base64UrlTobase64
+  getChainData
 } from "./helpers/utilities";
 import { IAssetData, IBoxProfile } from "./helpers/types";
 import { fonts } from "../styles";
@@ -46,7 +45,7 @@ import {
   DAI_TRANSFER,
   GET_ARWEAVE,
   SAVE_TO_ARWEAVE,
-  GET_IMG_FROM_TXN
+  GET_STATUS_FROM_TXN
 } from "./constants";
 import { callBalanceOf, callTransfer } from "./helpers/web3";
 
@@ -131,7 +130,7 @@ interface IAppState {
   pendingRequest: boolean;
   result: any | null;
   lastTxn: string | null;
-  imageURI: string | null;
+  imageUrl: string | null;
 }
 
 const INITIAL_STATE: IAppState = {
@@ -147,7 +146,7 @@ const INITIAL_STATE: IAppState = {
   pendingRequest: false,
   result: null,
   lastTxn: null,
-  imageURI: null
+  imageUrl: null
 };
 
 function initWeb3(provider: any) {
@@ -493,23 +492,24 @@ class Web3Connection extends React.Component<any, any> {
       this.setState({ pendingRequest: true });
 
       // trying out auth on server
-      const txnId = await axios.put(process.env.REACT_APP_GENERATOR_URL_BASE + 'arweave', {
+      const result = await axios.put(process.env.REACT_APP_GENERATOR_URL_BASE + 'arweave', {
         data: 'Hello from React! ✌🏻'
-      }).then(res => res.data.txnId)
+      }).then(res => res.data)
         .catch(err => console.error('error occurred while saving to Arweave.'));
 
       // format displayed result
       const formattedResult = {
         action: SAVE_TO_ARWEAVE,
-        txnId
+        txnId: result.txnId,
+        imageUrl: result.imageURI
       };
-
 
       // display result
       this.setState({
         web3,
         pendingRequest: false,
-        lastTxn: txnId,
+        lastTxn: result.txnId,
+        imageUrl: result.imageURI,
         result: formattedResult || null
       });
     } catch (error) {
@@ -518,7 +518,7 @@ class Web3Connection extends React.Component<any, any> {
     }
   };
 
-  public getImageFromLastTxn = async () => {
+  public getStatusFromLastTxn = async () => {
     const { web3, lastTxn } = this.state;
 
     if (!web3) {
@@ -533,16 +533,15 @@ class Web3Connection extends React.Component<any, any> {
       this.setState({ pendingRequest: true });
 
       // trying out auth on server
-      const imageUriAsBase64Url = await axios.get(
-        process.env.REACT_APP_GENERATOR_URL_BASE + 'arweaveImage/' + lastTxn
-      ).then(res => res.data.image)
+      const statusObject = await axios.get(
+        process.env.REACT_APP_GENERATOR_URL_BASE + 'arweave/status/' + lastTxn
+      ).then(res => res.data)
         .catch(err => console.error('error occurred while getting image from Arweave.'));
 
-      const imageURI = base64UrlTobase64(imageUriAsBase64Url);
       // format displayed result
       const formattedResult = {
-        action: GET_IMG_FROM_TXN,
-        imageURI
+        action: GET_STATUS_FROM_TXN,
+        status: statusObject
       };
 
 
@@ -550,7 +549,6 @@ class Web3Connection extends React.Component<any, any> {
       this.setState({
         web3,
         pendingRequest: false,
-        imageURI,
         result: formattedResult || null
       });
     } catch (error) {
@@ -729,15 +727,13 @@ class Web3Connection extends React.Component<any, any> {
                     </STestButton>
 
                     <p>Latest Txn ID: {this.state.lastTxn}</p>
+                    <br />
+                    <p>Image URL: <a href={this.state.imageUrl ?? ''} target='_blank'>{this.state.imageUrl}</a></p>
 
-                    <STestButton left onClick={this.getImageFromLastTxn}>
-                      {GET_IMG_FROM_TXN}
+                    <STestButton left onClick={this.getStatusFromLastTxn}>
+                      {GET_STATUS_FROM_TXN}
                     </STestButton>
 
-                    <img
-                      style={{ width: 66, height: 58 }}
-                      src={'data:image/jpg;base64,' + this.state.imageURI}
-                    />
                     {/* <STestButton
                       left
                       onClick={() => this.testContractCall(DAI_BALANCE_OF)}
