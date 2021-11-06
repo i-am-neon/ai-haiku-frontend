@@ -12,17 +12,14 @@ if (!process.env.REACT_APP_GENERATOR_URL_BASE) {
   throw new Error("Please add env variables.");
 }
 
-const token = sessionStorage.getItem('token') ?? '';
 
 axios.interceptors.request.use(request => {
-  console.log('attempting to add token to headers :>> ', token);
+  const token = sessionStorage.getItem('token') ?? '';
   if (!!request?.headers) {
     request.headers["X-JWT-Token"] = token
-    console.log('request.headers["X-JWT-Token"] :>> ', request.headers["X-JWT-Token"]);
   }
   return request;
 }, error => {
-  console.log('error :>> ', error);
   return Promise.reject(error);
 });
 
