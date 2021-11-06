@@ -31,7 +31,8 @@ import {
   recoverPublicKey,
   recoverPersonalSignature,
   formatTestTransaction,
-  getChainData
+  getChainData,
+  base64UrlTobase64
 } from "./helpers/utilities";
 import { IAssetData, IBoxProfile } from "./helpers/types";
 import { fonts } from "../styles";
@@ -43,7 +44,9 @@ import {
   BOX_GET_PROFILE,
   DAI_BALANCE_OF,
   DAI_TRANSFER,
-  GET_ARWEAVE
+  GET_ARWEAVE,
+  SAVE_TO_ARWEAVE,
+  GET_IMG_FROM_TXN
 } from "./constants";
 import { callBalanceOf, callTransfer } from "./helpers/web3";
 
@@ -127,6 +130,8 @@ interface IAppState {
   showModal: boolean;
   pendingRequest: boolean;
   result: any | null;
+  lastTxn: string | null;
+  imageURI: string | null;
 }
 
 const INITIAL_STATE: IAppState = {
@@ -140,7 +145,9 @@ const INITIAL_STATE: IAppState = {
   assets: [],
   showModal: false,
   pendingRequest: false,
-  result: null
+  result: null,
+  lastTxn: null,
+  imageURI: null
 };
 
 function initWeb3(provider: any) {
@@ -395,11 +402,7 @@ class Web3Connection extends React.Component<any, any> {
       // toggle pending request indicator
       this.setState({ pendingRequest: true });
 
-      const token = sessionStorage.getItem('token') ?? '';
-
-      const result = await axios.get(
-        process.env.REACT_APP_GENERATOR_URL_BASE + 'arweave',
-        { headers: { "X-JWT-Token": token } })
+      const result = await axios.get(process.env.REACT_APP_GENERATOR_URL_BASE + 'arweave')
         .then(res => res);
 
       // format displayed result
@@ -467,6 +470,87 @@ class Web3Connection extends React.Component<any, any> {
       this.setState({
         web3,
         pendingRequest: false,
+        result: formattedResult || null
+      });
+    } catch (error) {
+      console.error(error); // tslint:disable-line
+      this.setState({ web3, pendingRequest: false, result: null });
+    }
+  };
+
+  public saveImageToArweave = async () => {
+    const { web3, address } = this.state;
+
+    if (!web3) {
+      return;
+    }
+
+    try {
+      // open modal
+      this.toggleModal();
+
+      // toggle pending request indicator
+      this.setState({ pendingRequest: true });
+
+      // trying out auth on server
+      const txnId = await axios.put(process.env.REACT_APP_GENERATOR_URL_BASE + 'arweave', {
+        data: 'Hello from React! ✌🏻'
+      }).then(res => res.data.txnId)
+        .catch(err => console.error('error occurred while saving to Arweave.'));
+
+      // format displayed result
+      const formattedResult = {
+        action: SAVE_TO_ARWEAVE,
+        txnId
+      };
+
+
+      // display result
+      this.setState({
+        web3,
+        pendingRequest: false,
+        lastTxn: txnId,
+        result: formattedResult || null
+      });
+    } catch (error) {
+      console.error(error); // tslint:disable-line
+      this.setState({ web3, pendingRequest: false, result: null });
+    }
+  };
+
+  public getImageFromLastTxn = async () => {
+    const { web3, lastTxn } = this.state;
+
+    if (!web3) {
+      return;
+    }
+
+    try {
+      // open modal
+      this.toggleModal();
+
+      // toggle pending request indicator
+      this.setState({ pendingRequest: true });
+
+      // trying out auth on server
+      const imageUriAsBase64Url = await axios.get(
+        process.env.REACT_APP_GENERATOR_URL_BASE + 'arweaveImage/' + lastTxn
+      ).then(res => res.data.image)
+        .catch(err => console.error('error occurred while getting image from Arweave.'));
+
+      const imageURI = base64UrlTobase64(imageUriAsBase64Url);
+      // format displayed result
+      const formattedResult = {
+        action: GET_IMG_FROM_TXN,
+        imageURI
+      };
+
+
+      // display result
+      this.setState({
+        web3,
+        pendingRequest: false,
+        imageURI,
         result: formattedResult || null
       });
     } catch (error) {
@@ -639,6 +723,21 @@ class Web3Connection extends React.Component<any, any> {
                     <STestButton left onClick={this.getArweave}>
                       {GET_ARWEAVE}
                     </STestButton>
+
+                    <STestButton left onClick={this.saveImageToArweave}>
+                      {SAVE_TO_ARWEAVE}
+                    </STestButton>
+
+                    <p>Latest Txn ID: {this.state.lastTxn}</p>
+
+                    <STestButton left onClick={this.getImageFromLastTxn}>
+                      {GET_IMG_FROM_TXN}
+                    </STestButton>
+
+                    <img
+                      style={{ width: 66, height: 58 }}
+                      src={'data:image/jpg;base64,' + this.state.imageURI}
+                    />
                     {/* <STestButton
                       left
                       onClick={() => this.testContractCall(DAI_BALANCE_OF)}
