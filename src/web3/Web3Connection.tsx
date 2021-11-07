@@ -43,7 +43,6 @@ import {
   BOX_GET_PROFILE,
   DAI_BALANCE_OF,
   DAI_TRANSFER,
-  GET_ARWEAVE,
   MINT_NFT,
   GET_STATUS_FROM_TXN
 } from "./constants";
@@ -390,41 +389,6 @@ class Web3Connection extends React.Component<any, any> {
     }
   };
 
-  public getArweave = async () => {
-    const { web3, address } = this.state;
-
-    if (!web3) {
-      return;
-    }
-
-    try {
-      // open modal
-      this.toggleModal();
-
-      // toggle pending request indicator
-      this.setState({ pendingRequest: true });
-
-      const result = await axios.get(process.env.REACT_APP_GENERATOR_URL_BASE + 'arweave')
-        .then(res => res);
-
-      // format displayed result
-      const formattedResult = {
-        action: GET_ARWEAVE,
-        result
-      };
-
-      // display result
-      this.setState({
-        web3,
-        pendingRequest: false,
-        result: formattedResult || null
-      });
-    } catch (error) {
-      console.error(error); // tslint:disable-line
-      this.setState({ web3, pendingRequest: false, result: null });
-    }
-  };
-
   public testSignPersonalMessage = async () => {
     const { web3, address } = this.state;
 
@@ -495,11 +459,13 @@ class Web3Connection extends React.Component<any, any> {
       this.setState({ pendingRequest: true });
 
       // trying out auth on server
-      const metadataUri = await axios.put(process.env.REACT_APP_GENERATOR_URL_BASE + 'arweave', {
+      const result = await axios.put(process.env.REACT_APP_GENERATOR_URL_BASE + 'arweave', {
         data: 'Hello from React! ✌🏻'
-      }).then(res => res.data.metadataUri)
+      }).then(res => res.data)
         .catch(err => console.error('error occurred while saving to Arweave.'));
 
+      const metadataUri = result.metadataUri;
+      const txnId = result.txnId;
 
       const _provider = new ethers.providers.Web3Provider(window.ethereum);
 
@@ -516,7 +482,7 @@ class Web3Connection extends React.Component<any, any> {
       mintResult.wait().then((res: any) => {
         console.log('mint successful!');
         console.log('mintResult :>> ', res);
-      })
+      });
 
 
       // format displayed result
@@ -529,8 +495,8 @@ class Web3Connection extends React.Component<any, any> {
       this.setState({
         web3,
         pendingRequest: false,
-        lastTxn: metadataUri.txnId,
-        imageUrl: metadataUri.imageURI,
+        lastTxn: txnId,
+        metadataUri,
         result: formattedResult || null
       });
     } catch (error) {
@@ -741,17 +707,9 @@ class Web3Connection extends React.Component<any, any> {
                       {PERSONAL_SIGN}
                     </STestButton>
 
-                    <STestButton left onClick={this.getArweave}>
-                      {GET_ARWEAVE}
-                    </STestButton>
-
                     <STestButton left onClick={this.saveImageToArweave}>
                       {MINT_NFT}
                     </STestButton>
-
-                    <p>Latest Txn ID: {this.state.lastTxn}</p>
-                    <br />
-                    <p>Image URL: <a href={this.state.imageUrl ?? ''} target='_blank'>{this.state.imageUrl}</a></p>
 
                     <STestButton left onClick={this.getStatusFromLastTxn}>
                       {GET_STATUS_FROM_TXN}
