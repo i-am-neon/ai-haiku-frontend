@@ -44,10 +44,13 @@ import {
   DAI_BALANCE_OF,
   DAI_TRANSFER,
   GET_ARWEAVE,
-  SAVE_TO_ARWEAVE,
+  MINT_NFT,
   GET_STATUS_FROM_TXN
 } from "./constants";
-import { callBalanceOf, callTransfer } from "./helpers/web3";
+import contractAddress from '../contracts/contract-address.json';
+import GreeterArtifact from '../contracts/Greeter.json';
+import MyNFTArtifact from '../contracts/MyNFT.json';
+import { callBalanceOf, callTransfer, getGreeterContract } from "./helpers/web3";
 
 const SLayout = styled.div`
   position: relative;
@@ -492,24 +495,42 @@ class Web3Connection extends React.Component<any, any> {
       this.setState({ pendingRequest: true });
 
       // trying out auth on server
-      const result = await axios.put(process.env.REACT_APP_GENERATOR_URL_BASE + 'arweave', {
+      const metadataUri = await axios.put(process.env.REACT_APP_GENERATOR_URL_BASE + 'arweave', {
         data: 'Hello from React! ✌🏻'
-      }).then(res => res.data)
+      }).then(res => res.data.metadataUri)
         .catch(err => console.error('error occurred while saving to Arweave.'));
+
+
+      const _provider = new ethers.providers.Web3Provider(window.ethereum);
+
+      const myNftContract = new ethers.Contract(
+        contractAddress.Token,
+        MyNFTArtifact.abi,
+        _provider.getSigner(0)
+      );
+
+      console.log('myNftContract :>> ', myNftContract);
+
+      const mintResult = await myNftContract.mint(metadataUri);
+
+      mintResult.wait().then((res: any) => {
+        console.log('mint successful!');
+        console.log('mintResult :>> ', res);
+      })
+
 
       // format displayed result
       const formattedResult = {
-        action: SAVE_TO_ARWEAVE,
-        txnId: result.txnId,
-        imageUrl: result.imageURI
+        action: MINT_NFT,
+        metadataUri
       };
 
       // display result
       this.setState({
         web3,
         pendingRequest: false,
-        lastTxn: result.txnId,
-        imageUrl: result.imageURI,
+        lastTxn: metadataUri.txnId,
+        imageUrl: metadataUri.imageURI,
         result: formattedResult || null
       });
     } catch (error) {
@@ -538,7 +559,7 @@ class Web3Connection extends React.Component<any, any> {
       ).then(res => res.data.status)
         .catch(err => console.error('error occurred while getting image from Arweave.'));
 
-        console.log('statusObject.status :>> ', statusObject.status);
+      console.log('statusObject.status :>> ', statusObject.status);
       // format displayed result
       const formattedResult = {
         action: GET_STATUS_FROM_TXN,
@@ -725,7 +746,7 @@ class Web3Connection extends React.Component<any, any> {
                     </STestButton>
 
                     <STestButton left onClick={this.saveImageToArweave}>
-                      {SAVE_TO_ARWEAVE}
+                      {MINT_NFT}
                     </STestButton>
 
                     <p>Latest Txn ID: {this.state.lastTxn}</p>

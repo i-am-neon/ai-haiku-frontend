@@ -50,6 +50,22 @@ const supportedChains: IChainData[] = [
     }
   },
   {
+    name: "localhost:8545",
+    short_name: "hardhat_local",
+    chain: "ETH",
+    network: "hardhat_local",
+    chain_id: 10,
+    network_id: 10,
+    rpc_url: "https://rinkeby.infura.io/v3/%API_KEY%",
+    native_currency: {
+      symbol: "ETH",
+      name: "Ethereum",
+      decimals: "18",
+      contractAddress: "",
+      balance: ""
+    }
+  },
+  {
     name: "Ethereum Görli",
     short_name: "gor",
     chain: "ETH",
