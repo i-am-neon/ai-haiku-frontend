@@ -464,8 +464,9 @@ class Web3Connection extends React.Component<any, any> {
       }).then(res => res.data)
         .catch(err => console.error('error occurred while saving to Arweave.'));
 
-      const metadataUri = result.metadataUri;
       const txnId = result.txnId;
+      const metadataUri = result.metadataUri;
+      const signature = result.signature;
 
       const _provider = new ethers.providers.Web3Provider(window.ethereum);
 
@@ -477,7 +478,7 @@ class Web3Connection extends React.Component<any, any> {
 
       console.log('myNftContract :>> ', myNftContract);
 
-      const mintResult = await myNftContract.mint(metadataUri);
+      const mintResult = await myNftContract.mint(metadataUri, signature);
 
       mintResult.wait().then((res: any) => {
         console.log('mint successful!');
@@ -488,7 +489,8 @@ class Web3Connection extends React.Component<any, any> {
       // format displayed result
       const formattedResult = {
         action: MINT_NFT,
-        metadataUri
+        metadataUri,
+        signature
       };
 
       // display result
