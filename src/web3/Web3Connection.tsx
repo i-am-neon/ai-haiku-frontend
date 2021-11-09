@@ -47,8 +47,7 @@ import {
   GET_STATUS_FROM_TXN
 } from "./constants";
 import contractAddress from '../contracts/contract-address.json';
-import GreeterArtifact from '../contracts/Greeter.json';
-import MyNFTArtifact from '../contracts/MyNFT.json';
+import EthArNFTArtifact from '../contracts/EthArNFT.json';
 import { callBalanceOf, callTransfer, getGreeterContract } from "./helpers/web3";
 
 const SLayout = styled.div`
@@ -470,15 +469,15 @@ class Web3Connection extends React.Component<any, any> {
 
       const _provider = new ethers.providers.Web3Provider(window.ethereum);
 
-      const myNftContract = new ethers.Contract(
+      const contract = new ethers.Contract(
         contractAddress.Token,
-        MyNFTArtifact.abi,
+        EthArNFTArtifact.abi,
         _provider.getSigner(0)
       );
 
-      console.log('myNftContract :>> ', myNftContract);
+      console.log('myNftContract :>> ', contract);
 
-      const mintResult = await myNftContract.mint(metadataUri, signature);
+      const mintResult = await contract.mint(metadataUri, signature);
 
       mintResult.wait().then((res: any) => {
         console.log('mint successful!');
