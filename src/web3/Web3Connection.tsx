@@ -13,7 +13,7 @@ import Authereum from "authereum";
 import { Bitski } from "bitski";
 
 import axios from 'axios'
-import { ethers } from 'ethers'
+import { ethers, Contract, BigNumber } from 'ethers'
 
 import Button from "./components/Button";
 import Column from "./components/Column";
@@ -49,6 +49,7 @@ import {
 import contractAddress from '../contracts/contract-address.json';
 import EthArNFTArtifact from '../contracts/EthArNFT.json';
 import { callBalanceOf, callTransfer, getGreeterContract } from "./helpers/web3";
+import { GENERATOR_URL_BASE, NODE_ENV } from "../utils/envVariables";
 
 const SLayout = styled.div`
   position: relative;
@@ -126,9 +127,12 @@ interface IAppState {
   connected: boolean;
   chainId: number;
   networkId: number;
+  contract: Contract | null;
   assets: IAssetData[];
   showModal: boolean;
   pendingRequest: boolean;
+  mintPriceInWei: BigNumber | null;
+  mintPriceDisplay: string | null;
   result: any | null;
   lastTxn: string | null;
   imageUrl: string | null;
@@ -142,9 +146,12 @@ const INITIAL_STATE: IAppState = {
   connected: false,
   chainId: 1,
   networkId: 1,
+  contract: null,
   assets: [],
   showModal: false,
   pendingRequest: false,
+  mintPriceInWei: null,
+  mintPriceDisplay: null,
   result: null,
   lastTxn: null,
   imageUrl: null
@@ -206,9 +213,22 @@ class Web3Connection extends React.Component<any, any> {
     const chainId = await web3.eth.chainId();
 
     // To stop from using mainnet before launch so I don't spend real money
-    if (chainId === 1) {
-      throw new Error("STOP you're on mainnet, you idiot!");
+    if (NODE_ENV !== 'production' && chainId === 1) {
+      throw new Error("Please switch Metamask to a testnet.");
     }
+
+    const _provider = new ethers.providers.Web3Provider(window.ethereum);
+
+    const contract = new ethers.Contract(
+      contractAddress.Token,
+      EthArNFTArtifact.abi,
+      _provider.getSigner(0)
+    );
+
+    console.log('myNftContract :>> ', contract);
+
+    const mintPriceInWei = await contract.PRICE();
+    const mintPriceDisplay = ethers.utils.formatEther(mintPriceInWei) + ' Ξ'
 
     await this.setState({
       web3,
@@ -216,7 +236,10 @@ class Web3Connection extends React.Component<any, any> {
       connected: true,
       address,
       chainId,
-      networkId
+      networkId,
+      contract,
+      mintPriceInWei,
+      mintPriceDisplay
     });
     await this.getAccountAssets();
   };
@@ -401,7 +424,7 @@ class Web3Connection extends React.Component<any, any> {
     }
 
     // test message
-    const message = await axios.get(process.env.REACT_APP_GENERATOR_URL_BASE + 'nonce/' + address).then(res => res.data.message);
+    const message = await axios.get(GENERATOR_URL_BASE + 'nonce/' + address).then(res => res.data.message);
 
     // encode message (hex)
     const hexMsg = convertUtf8ToHex(message ?? '');
@@ -417,7 +440,7 @@ class Web3Connection extends React.Component<any, any> {
       const result = await web3.eth.personal.sign(hexMsg, address);
 
       // trying out auth on server
-      await axios.post(process.env.REACT_APP_GENERATOR_URL_BASE + 'login', {
+      await axios.post(GENERATOR_URL_BASE + 'login', {
         address: address,
         signature: result,
       }).then(res => sessionStorage.setItem('token', res.data.token))
@@ -449,9 +472,10 @@ class Web3Connection extends React.Component<any, any> {
   };
 
   public saveImageToArweave = async () => {
-    const { web3, address } = this.state;
+    const { web3, contract, mintPriceInWei } = this.state;
 
-    if (!web3) {
+    if (!web3 || !contract || !mintPriceInWei) {
+      console.error('failed check for the state\'s web3, contract, and mintPriceInGwei');
       return;
     }
 
@@ -463,7 +487,7 @@ class Web3Connection extends React.Component<any, any> {
       this.setState({ pendingRequest: true });
 
       // trying out auth on server
-      const result = await axios.put(process.env.REACT_APP_GENERATOR_URL_BASE + 'arweave', {
+      const result = await axios.put(GENERATOR_URL_BASE + 'arweave', {
         data: 'Hello from React! ✌🏻'
       }).then(res => res.data)
         .catch(err => console.error('error occurred while saving to Arweave.'));
@@ -472,19 +496,9 @@ class Web3Connection extends React.Component<any, any> {
       const metadataUri = result.metadataUri;
       const signature = result.signature;
 
-      const _provider = new ethers.providers.Web3Provider(window.ethereum);
+      const mintResult = await this.state.contract!.mint(metadataUri, signature, { value: mintPriceInWei });
 
-      const contract = new ethers.Contract(
-        contractAddress.Token,
-        EthArNFTArtifact.abi,
-        _provider.getSigner(0)
-      );
-
-      console.log('myNftContract :>> ', contract);
-
-      const mintResult = await contract.mint(metadataUri, signature);
-
-      mintResult.wait().then((res: any) => {
+      await mintResult.wait().then((res: any) => {
         console.log('mint successful!');
         console.log('mintResult :>> ', res);
       });
@@ -720,6 +734,10 @@ class Web3Connection extends React.Component<any, any> {
                     <STestButton left onClick={this.getStatusFromLastTxn}>
                       {GET_STATUS_FROM_TXN}
                     </STestButton>
+
+                    <br /><br />
+
+                    <p>Mint Price: {this.state.mintPriceDisplay}</p>
 
                     {/* <STestButton
                       left

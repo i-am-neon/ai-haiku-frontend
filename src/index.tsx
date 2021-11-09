@@ -3,15 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import dotenv from 'dotenv';
 import axios from 'axios';
-
-dotenv.config();
-
-if (!process.env.REACT_APP_GENERATOR_URL_BASE) {
-  throw new Error("Please add env variables.");
-}
-
 
 axios.interceptors.request.use(request => {
   const token = sessionStorage.getItem('token') ?? '';
