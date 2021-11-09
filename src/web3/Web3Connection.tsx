@@ -205,6 +205,11 @@ class Web3Connection extends React.Component<any, any> {
 
     const chainId = await web3.eth.chainId();
 
+    // To stop from using mainnet before launch so I don't spend real money
+    if (chainId === 1) {
+      throw new Error("STOP you're on mainnet, you idiot!");
+    }
+
     await this.setState({
       web3,
       provider,
