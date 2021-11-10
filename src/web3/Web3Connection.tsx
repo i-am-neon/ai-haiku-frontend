@@ -47,8 +47,8 @@ import {
   GET_STATUS_FROM_TXN
 } from "./constants";
 import contractAddress from '../contracts/contract-address.json';
-import EthArNFTArtifact from '../contracts/EthArNFT.json';
-import { callBalanceOf, callTransfer, getGreeterContract } from "./helpers/web3";
+import AiHaikuContractArtifact from '../contracts/AIHaiku.json';
+import { callBalanceOf, callTransfer } from "./helpers/web3";
 import { GENERATOR_URL_BASE, NODE_ENV } from "../utils/envVariables";
 
 const SLayout = styled.div`
@@ -221,7 +221,7 @@ class Web3Connection extends React.Component<any, any> {
 
     const contract = new ethers.Contract(
       contractAddress.Token,
-      EthArNFTArtifact.abi,
+      AiHaikuContractArtifact.abi,
       _provider.getSigner(0)
     );
 

@@ -1,13 +1,5 @@
 import { DAI_CONTRACT, GREETER_CONTRACT } from '../constants'
 
-export function getGreeterContract(chainId: number, web3: any) {
-  const greeterContract = new web3.eth.Contract(
-    GREETER_CONTRACT[chainId].abi,
-    GREETER_CONTRACT[chainId].address
-  )
-  return greeterContract
-}
-
 export function getDaiContract(chainId: number, web3: any) {
   const dai = new web3.eth.Contract(
     DAI_CONTRACT[chainId].abi,
