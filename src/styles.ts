@@ -13,6 +13,8 @@ export const colors: { [name: string]: string } = {
   pink: "255, 51, 102",
   red: "214, 75, 71",
   purple: "110, 107, 233",
+  // AI Haiku theme:
+  crimsonGlory: "188, 0, 45"
 };
 
 export const fonts = {

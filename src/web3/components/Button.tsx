@@ -126,7 +126,7 @@ Button.defaultProps = {
   fetching: false,
   outline: false,
   type: "button",
-  color: "lightBlue",
+  color: "crimsonGlory",
   disabled: false,
   icon: null,
   left: false,

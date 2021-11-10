@@ -8,7 +8,7 @@ const SBannerWrapper = styled.div`
   align-items: center;
   position: relative;
   & span {
-    color: rgb(${colors.lightBlue});
+    color: rgb(${colors.crimsonGlory});
     font-weight: ${fonts.weight.bold};
     font-size: ${fonts.size.h5};
     margin-left: 12px;

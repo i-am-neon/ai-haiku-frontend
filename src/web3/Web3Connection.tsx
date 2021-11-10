@@ -496,13 +496,17 @@ class Web3Connection extends React.Component<any, any> {
       const metadataUri = result.metadataUri;
       const signature = result.signature;
 
-      const mintResult = await this.state.contract!.mint(metadataUri, signature, { value: mintPriceInWei });
+      const mintTx = await this.state.contract!.mint(metadataUri, signature, { value: mintPriceInWei });
+      console.log('mintResult :>> ', mintTx);
+      // IMPLEMENT THE BELOW in the loading modal, remove rinkeby for production
+      console.log('REMOVE rinkeby in the below text for production');
+      console.log('view status on: https://rinkeby.etherscan.io/tx/' + mintTx.hash);
+      
 
-      await mintResult.wait().then((res: any) => {
+      await mintTx.wait().then((res: any) => {
         console.log('mint successful!');
         console.log('mintResult :>> ', res);
       });
-
 
       // format displayed result
       const formattedResult = {
