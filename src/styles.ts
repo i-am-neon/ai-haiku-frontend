@@ -93,12 +93,6 @@ export const globalStyle = `
     padding: 0;
   }
 
-  canvas {
-    left: 0;
-    width: 50%;
-    height: 50%;
-  }
-  
   body {
     font-family: ${fonts.family.OpenSans};
     font-style: normal;
