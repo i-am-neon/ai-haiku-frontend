@@ -1,11 +1,9 @@
-import { addMatsuoRenderer } from "./MatsuoRenderer";
-import Canvas from './Canvas';
+import MatsuoRenderer from './MatsuoRenderer';
+
 export default function Home() {
-    // addMatsuoRenderer();
     return (
         <>
-            {/* <canvas></canvas> */}
-            <Canvas />
+            <MatsuoRenderer />
             <p>Hello.</p>
             <a href='/mint'>Go to the mint page</a>
             <br /><br />
