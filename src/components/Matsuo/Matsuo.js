@@ -20,6 +20,7 @@ export default function Matsuo() {
         aperture={5.5}
         fov={0}
         curl={0.420}
+        // {...props}
         />
     </>
   )

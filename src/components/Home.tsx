@@ -1,12 +1,11 @@
-import MatsuoRenderer from './MatsuoRenderer';
+import Interaction from './Interaction';
+import MatsuoRenderer from './Matsuo/MatsuoRenderer';
 
 export default function Home() {
     return (
         <>
             <MatsuoRenderer />
-            <p>Hello.</p>
-            <a href='/mint'>Go to the mint page</a>
-            <br /><br />
+            <Interaction />
         </>
     );
-}
+    }

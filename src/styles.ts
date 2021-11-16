@@ -38,7 +38,7 @@ export const fonts = {
     extrabold: 800,
   },
   family: {
-    OpenSans: '"Open Sans", sans-serif',
+    ShipporiMincho: '"Shippori Mincho B1", serif',
   },
 };
 
@@ -94,7 +94,7 @@ export const globalStyle = `
   }
 
   body {
-    font-family: ${fonts.family.OpenSans};
+    font-family: ${fonts.family.ShipporiMincho};
     font-style: normal;
     font-stretch: normal;
     font-weight: ${fonts.weight.normal};
