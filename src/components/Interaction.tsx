@@ -16,23 +16,35 @@ interface InteractionProps {
 }
 
 interface InteractionState {
-    currentSpeech: JSX.Element[]
+    currentSpeech: string,
+    indexToFade: number
 }
 
 class Interaction extends React.Component<InteractionProps, InteractionState> {
-    state = { currentSpeech: [] }
+    state = {
+        currentSpeech: '',
+        indexToFade: -1
+    }
 
     async componentDidMount() {
         await this.sleep(3000);
-        this.createSpeech(initialGreeting.split(''));
+        this.setState({ currentSpeech: initialGreeting });
+        for (let index = 0; index < this.state.currentSpeech.length; index++) {
+            await this.sleep(100);
+            this.setState({ indexToFade: index });
+            
+        }
     }
 
-    createSpeech = async (speech: string[]) => {
-        for (let i = 0; i < speech.length; i++) {
-            await this.sleep(100);
-            console.log('adding word:', speech[i]);
-            this.setState({ currentSpeech: [...this.state.currentSpeech, fadeIn(speech[i])] });
+    createFadeIn(speech: string): JSX.Element[] {
+        const speechArray = speech.split(' ');
+        const ret: JSX.Element[] = []
+        for (let i = 0; i < speechArray.length; i++) {
+            const n = <Fade in={this.state.indexToFade >= i}><span>{speechArray[i] + ' '}</span></Fade>
+            ret.push(n);
         }
+
+        return ret;
     }
 
     async sleep(ms: number) {
@@ -40,7 +52,11 @@ class Interaction extends React.Component<InteractionProps, InteractionState> {
     }
 
     render() {
-        return (<p>{this.state.currentSpeech}</p>);
+        return (
+            <>
+                {this.createFadeIn(this.state.currentSpeech)}
+            </>
+        );
     }
 }
 

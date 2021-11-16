@@ -6,6 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import { ReactComponent as DiscordIcon } from '../assets/discord.svg';
 import { ReactComponent as TwitterIcon } from '../assets/twitter.svg';
 import logo from '../assets/logo.png';
+import logoRed from '../assets/logo-red.png';
 import { colors } from '../styles';
 import { height } from '@mui/system';
 
@@ -17,7 +18,7 @@ export default function NavBar() {
           <Typography component="div" sx={{ flexGrow: 1 }}>
             <a href="/">
               <img
-                src={logo}
+                src={logoRed}
                 style={{ width: '30vh' }}
                 alt="AI Haiku logo: the word 'Haiku' in japanese calligraphy with the 'AI' in red and the rest of the letters in black."
               />
