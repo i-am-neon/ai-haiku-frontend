@@ -18,7 +18,7 @@ class Interaction extends React.Component<{}, InteractionState> {
     }
 
     async componentDidMount() {
-        await this.sleep(3000);
+        await this.sleep(4000);
         const initialGreeting = this.getSpeechByName(INITIAL_GREETING);
         this.setState({
             matsuosSpeech: initialGreeting.matsuo,
@@ -53,13 +53,21 @@ class Interaction extends React.Component<{}, InteractionState> {
 
     buildMatsuosSpeech(speech: string): JSX.Element[] {
         const speechArray = speech.split('');
+        console.log('speechArray :>> ', speechArray);
         const ret: JSX.Element[] = []
         for (let i = 0; i < speechArray.length; i++) {
-            const n = (
-                <Fade in={this.state.matsuosSpeechIndexToFade >= i} key={i}>
-                    <span>{speechArray[i]}</span>
-                </Fade>
-            )
+            let n;
+            if (speechArray[i] === '\n') {
+                // New line
+                console.log('speechArray[i] :>> ', speechArray[i]);
+                n = (<><br /></>)
+            } else {
+                n = (
+                    <Fade in={this.state.matsuosSpeechIndexToFade >= i} key={i}>
+                        <span>{speechArray[i]}</span>
+                    </Fade>
+                )
+            }
             ret.push(n);
         }
         return ret;
@@ -85,7 +93,7 @@ class Interaction extends React.Component<{}, InteractionState> {
     async fadeInCurrentSpeech() {
         // Fade in Matsuo's speech
         for (let index = 0; index < this.state.matsuosSpeech.length; index++) {
-            await this.sleep(50);
+            await this.sleep(15);
             this.setState({ matsuosSpeechIndexToFade: index });
         }
         await this.sleep(500);
@@ -103,7 +111,7 @@ class Interaction extends React.Component<{}, InteractionState> {
     render() {
         return (
             <>
-                {this.buildMatsuosSpeech(this.state.matsuosSpeech)}
+                <p>{this.buildMatsuosSpeech(this.state.matsuosSpeech)}</p>
                 {this.buildUserSpeech(this.state.userSpeech)}
             </>
         );
