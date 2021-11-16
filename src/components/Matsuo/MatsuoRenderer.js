@@ -23,7 +23,7 @@ export default class Canvas extends React.Component {
     }
     render() {
         return (
-            <canvas style={{ width: '35vh', height: '35vh' }} />
+            <canvas style={{ width: '15vh', height: '15vh' }} />
         );
     }
 }
