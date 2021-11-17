@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Fade from '@mui/material/Fade';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { INITIAL_GREETING, speech } from './speech';
 
 interface InteractionState {
@@ -76,15 +77,28 @@ class Interaction extends React.Component<{}, InteractionState> {
     buildUserSpeech(userSpeechList: any[]): JSX.Element[] {
         const ret: JSX.Element[] = []
         for (let i = 0; i < userSpeechList.length; i++) {
-            const n = (
-                <>
-                    <Fade in={this.state.userSpeechIndexToFade >= i} key={i}>
-                        <p><a onClick={async () => await this.updateInteraction(userSpeechList[i].redirectToAnswer)}>
-                            {userSpeechList[i].question}
-                        </a></p>
-                    </Fade>
-                </>
-            )
+            let n;
+            if (userSpeechList[i]?.question?.includes('\r')) {
+                n = (
+                    <>
+                        <Fade in={this.state.userSpeechIndexToFade >= i} key={i}>
+                            <p><a href="/paper" target="_blank">
+                                {userSpeechList[i].question} <OpenInNewIcon fontSize="small" />
+                            </a></p>
+                        </Fade>
+                    </>
+                )
+            } else {
+                n = (
+                    <>
+                        <Fade in={this.state.userSpeechIndexToFade >= i} key={i}>
+                            <p><a onClick={async () => await this.updateInteraction(userSpeechList[i].redirectToAnswer)}>
+                                {userSpeechList[i].question}
+                            </a></p>
+                        </Fade>
+                    </>
+                )
+            }
             ret.push(n);
         }
         return ret;
@@ -93,7 +107,7 @@ class Interaction extends React.Component<{}, InteractionState> {
     async fadeInCurrentSpeech() {
         // Fade in Matsuo's speech
         for (let index = 0; index < this.state.matsuosSpeech.length; index++) {
-            await this.sleep(15);
+            await this.sleep(25);
             this.setState({ matsuosSpeechIndexToFade: index });
         }
         await this.sleep(500);

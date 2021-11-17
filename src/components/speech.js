@@ -4,7 +4,8 @@ export const WHO_ARE_YOU = 'whoAreYou';
 export const WHAT_IS_AI_HAIKU = 'whatIsAiHaiku';
 export const THE_TECH_AI = 'theTechAi';
 export const THE_TECH_BLOCKCHAIN = 'theTechBlockchain';
-export const HOW_WE_COLLABORATE = 'howWeCollaborate';
+export const HOW_WE_COLLABORATE_1 = 'howWeCollaborate1';
+export const HOW_WE_COLLABORATE_2 = 'howWeCollaborate2';
 export const HAIKU_EXAMPLE = 'haikuExample';
 
 export const speech = [
@@ -49,7 +50,7 @@ export const speech = [
             user: [
                 {
                     question: 'How will we collaborate?.',
-                    redirectToAnswer: HOW_WE_COLLABORATE
+                    redirectToAnswer: HOW_WE_COLLABORATE_1
                 },
                 {
                     question: 'What will these poems look like?.',
@@ -66,7 +67,6 @@ export const speech = [
         name: THE_TECH_AI,
         data: {
             matsuo: `I see you're a curious one. I am a program that utilizes OpenAI's GPT-3 language model.
-                    GPT-3 is an autoregressive language model that uses deep learning to produce human-like text.
                     GPT-3 was trained on hundreds of billions of parameters in a multi-million dollar research effort,
                     making me one of the most advanced language models in existence (not to toot my own horn).`,
             user: [
@@ -88,24 +88,37 @@ export const speech = [
             user: [
                 {
                     question: 'How will we collaborate?',
-                    redirectToAnswer: HOW_WE_COLLABORATE
+                    redirectToAnswer: HOW_WE_COLLABORATE_1
                 },
             ]
         }
     },
     {
-        name: HOW_WE_COLLABORATE,
+        name: HOW_WE_COLLABORATE_1,
         data: {
             matsuo: `You will give me the subject of the haiku we will write. I, in turn, will present you with three haikus born from your idea.
                     Then you will decide which one will live eternally on the blockchain as an NFT.`,
             user: [
                 {
-                    question: 'How will we collaborate?',
-                    redirectToAnswer: HOW_WE_COLLABORATE
+                    question: 'Go on.',
+                    redirectToAnswer: HOW_WE_COLLABORATE_2
+                }
+            ]
+        }
+    },
+    {
+        name: HOW_WE_COLLABORATE_2,
+        data: {
+            matsuo: `I will rummage through my humble hut in the metaverse to find some parchment to write your haiku on.
+                    My office is full of rare and unique paper. Who knows which one my brush will land on?`,
+            user: [
+                {
+                    question: 'What will go on this paper?',
+                    redirectToAnswer: HOW_WE_COLLABORATE_2
                 },
                 {
-                    question: 'What will these poems look like?.',
-                    redirectToAnswer: HAIKU_EXAMPLE
+                    question: 'Show me the different paper types. \r',
+                    redirectToAnswer: HOW_WE_COLLABORATE_2
                 },
             ]
         }
@@ -117,7 +130,7 @@ export const speech = [
             user: [
                 {
                     question: 'How will we collaborate?',
-                    redirectToAnswer: HOW_WE_COLLABORATE
+                    redirectToAnswer: HOW_WE_COLLABORATE_1
                 },
                 {
                     question: 'What will these poems look like?.',
