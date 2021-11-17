@@ -54,13 +54,11 @@ class Interaction extends React.Component<{}, InteractionState> {
 
     buildMatsuosSpeech(speech: string): JSX.Element[] {
         const speechArray = speech.split('');
-        console.log('speechArray :>> ', speechArray);
         const ret: JSX.Element[] = []
         for (let i = 0; i < speechArray.length; i++) {
             let n;
             if (speechArray[i] === '\n') {
                 // New line
-                console.log('speechArray[i] :>> ', speechArray[i]);
                 n = (<><br /></>)
             } else {
                 n = (
@@ -79,6 +77,7 @@ class Interaction extends React.Component<{}, InteractionState> {
         for (let i = 0; i < userSpeechList.length; i++) {
             let n;
             if (userSpeechList[i]?.question?.includes('\r')) {
+                // For 'open in new tab' icon on HOW_WE_COLLABORATE_2 for opening the /paper page.
                 n = (
                     <>
                         <Fade in={this.state.userSpeechIndexToFade >= i} key={i}>
@@ -107,7 +106,10 @@ class Interaction extends React.Component<{}, InteractionState> {
     async fadeInCurrentSpeech() {
         // Fade in Matsuo's speech
         for (let index = 0; index < this.state.matsuosSpeech.length; index++) {
-            await this.sleep(25);
+            if (this.state.matsuosSpeech[index] !== '\n') {
+                // Don't wait on new lines. For some reason it throws off the cadence.
+                await this.sleep(25);
+            }
             this.setState({ matsuosSpeechIndexToFade: index });
         }
         await this.sleep(500);

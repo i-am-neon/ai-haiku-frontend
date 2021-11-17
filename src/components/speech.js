@@ -1,11 +1,14 @@
 
 export const INITIAL_GREETING = 'initialGreeting';
-export const WHO_ARE_YOU = 'whoAreYou';
+export const WHO_ARE_YOU_1 = 'whoAreYou1';
+export const WHO_ARE_YOU_2 = 'whoAreYou2';
 export const WHAT_IS_AI_HAIKU = 'whatIsAiHaiku';
 export const THE_TECH_AI = 'theTechAi';
 export const THE_TECH_BLOCKCHAIN = 'theTechBlockchain';
 export const HOW_WE_COLLABORATE_1 = 'howWeCollaborate1';
 export const HOW_WE_COLLABORATE_2 = 'howWeCollaborate2';
+export const HOW_WE_COLLABORATE_3 = 'howWeCollaborate3';
+export const HOW_WE_COLLABORATE_4 = 'howWeCollaborate4';
 export const HAIKU_EXAMPLE = 'haikuExample';
 
 export const speech = [
@@ -16,7 +19,7 @@ export const speech = [
             user: [
                 {
                     question: 'Who are you?',
-                    redirectToAnswer: WHO_ARE_YOU
+                    redirectToAnswer: WHO_ARE_YOU_1
                 },
                 {
                     question: 'What is AI Haiku?',
@@ -24,16 +27,36 @@ export const speech = [
                 },
                 {
                     question: 'I\'ve got some specific questions.',
-                    redirectToAnswer: WHO_ARE_YOU
+                    redirectToAnswer: WHO_ARE_YOU_1
                 },
             ]
         }
     },
     {
-        name: WHO_ARE_YOU,
+        name: WHO_ARE_YOU_1,
         data: {
-            matsuo: 'I was born blah blah blah...',
+            matsuo: `I am an artificial intelligence entity created to emulate Matsuo Bashō, widely recognized as
+                    the greatest master of haiku. The dataset I was trained on includes but is not limited to Bashō's
+                    life, second-hand accounts of his actions, and all known works.`,
             user: [
+                {
+                    question: 'Interesting. But why here? Why now?',
+                    redirectToAnswer: INITIAL_GREETING
+                },
+            ]
+        }
+    },
+    {
+        name: WHO_ARE_YOU_2,
+        data: {
+            matsuo: `The real Matsuo Bashō died on November 28th, 1694. We will honor Bashō by continuing the tradition of the haiku
+                    using new technological mediums. On November 28th, 2021, we will celebrate Bashō's life by working together
+                    to create haikus of our own as "AI Haiku" NFTs.`,
+            user: [
+                {
+                    question: 'What is AI Haiku?',
+                    redirectToAnswer: WHAT_IS_AI_HAIKU
+                },
                 {
                     question: 'Thank you.',
                     redirectToAnswer: INITIAL_GREETING
@@ -46,7 +69,8 @@ export const speech = [
         data: {
             matsuo: `Ah, yes. I kindly thank you for asking.
                     The AI Haiku is a creative experiment where you will collaborate with me,
-                    an artificial intelligence model to author a poem that will stand the test of time.`,
+                    an artificial intelligence model to author a poem that will stand the test of time
+                    as an NFT on the Ethereum blockchain.`,
             user: [
                 {
                     question: 'How will we collaborate?.',
@@ -109,16 +133,44 @@ export const speech = [
     {
         name: HOW_WE_COLLABORATE_2,
         data: {
-            matsuo: `I will rummage through my humble hut in the metaverse to find some parchment to write your haiku on.
+            matsuo: `I will rummage through my humble hut in the metaverse to find some parchment to write your haiku.
                     My office is full of rare and unique paper. Who knows which one my brush will land on?`,
             user: [
                 {
                     question: 'What will go on this paper?',
-                    redirectToAnswer: HOW_WE_COLLABORATE_2
+                    redirectToAnswer: HOW_WE_COLLABORATE_3
                 },
                 {
-                    question: 'Show me the different paper types. \r',
-                    redirectToAnswer: HOW_WE_COLLABORATE_2
+                    question: 'Show me the different paper types. \r'
+                },
+            ]
+        }
+    },
+    {
+        name: HOW_WE_COLLABORATE_3,
+        data: {
+            matsuo: `I will translate your title of the haiku you so gracefully provided into my mother tongue, Japanese.
+                    The title will go in the top right of the paper. Next, I will write the content of your Haiku in the
+                    center of the page. Finally, I will use the title you have given me to generate a simple, yet unique
+                    combination of brush strokes on the parchment.`,
+            user: [
+                {
+                    question: 'Surely your time is valuable. How much would such an item cost?',
+                    redirectToAnswer: HOW_WE_COLLABORATE_4
+                },
+            ]
+        }
+    },
+    {
+        name: HOW_WE_COLLABORATE_4,
+        data: {
+            matsuo: `Oy! It is not polite to speak of such things. But I suppose you should know.
+                    Each haiku will cost 0.01 Ether (plus gas prices) to mint. There is no limit on the number
+                    of haikus you can mint, but you may only mint one at a time.`,
+            user: [
+                {
+                    question: 'What does the haiku look like?',
+                    redirectToAnswer: HAIKU_EXAMPLE
                 },
             ]
         }
