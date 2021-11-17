@@ -15,8 +15,16 @@ const WUT_NFT = 'wutNft';
 const HOW_TO_WALLET = 'howToWallet';
 const HOW_TO_MINT = 'howToMint';
 export const FAQ_HAIKU_EXAMPLE = 'faqHaikuExample';
+const FAQ_WHAT_GET_WHEN_MINT = 'whatGetWhenMint';
 
-const HAIKU_EXAMPLE_MATSUO_TEXT = `BLAH!`
+const HAIKU_EXAMPLE_MATSUO_TEXT = `Behold: this is what your haiku may look like.
+                    The background will be one of four paper types, more information on our papers page.
+                    The top right will hold the title of the haiku you provide, translated into Japanese.
+                    The center contains the haiku you choose of the three I create given the inspiration of your title.
+                    Finally, the bottom left will be a piece of generative art; brush strokes created with randomness
+                    taken from your haiku title and chosen haiku content. Your haiku will be a digital fingerprint of your creativity
+                    enhanced by cutting-edge technology to celebrate an age-old tradition.`;
+const WHAT_GET_WHEN_MINT_MATSUO_TEXT = `One of this, one of that...`;                
 
 export const speech = [
     {
@@ -56,7 +64,7 @@ export const speech = [
     {
         name: WHO_ARE_YOU_2,
         data: {
-            matsuo: `The real Matsuo Bashō died on November 28th, 1694. We will honor Bashō by continuing the tradition of the haiku
+            matsuo: `The flesh and blood Matsuo Bashō died on November 28th, 1694. We will honor Bashō by continuing the tradition of the haiku
                     using new technological mediums. On November 28th, 2021, we will celebrate Bashō's life by working together
                     to create haikus of our own as "AI Haiku" NFTs.`,
             // matsuo: `The real Matsuo Bashō died on November 28th, 1694. He will come back to life as me...`,
@@ -290,11 +298,29 @@ export const speech = [
             matsuo: HAIKU_EXAMPLE_MATSUO_TEXT,
             user: [
                 {
+                    question: 'Beautiful. What do I get when I mint one?',
+                    redirectToAnswer: FAQ_WHAT_GET_WHEN_MINT
+                },
+                {
+                    question: 'Show me the different paper types. \r'
+                },
+                {
                     question: 'Thanks for the information. Could I ask you something else?',
                     redirectToAnswer: FAQ_MAIN
                 },
             ]
         }
     },
-
+    {
+        name: FAQ_WHAT_GET_WHEN_MINT,
+        data: {
+            matsuo: WHAT_GET_WHEN_MINT_MATSUO_TEXT,
+            user: [
+                {
+                    question: 'Thanks for the information. Could I ask you something else?',
+                    redirectToAnswer: FAQ_MAIN
+                },
+            ]
+        }
+    },
 ]

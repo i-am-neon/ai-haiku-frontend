@@ -16,10 +16,7 @@ export default class Home extends React.Component<HomeProps, HomeState> {
     }
 
     setShowExampleHaiku(b: boolean): void {
-        console.log(`setting haiku home state to:`, b)
-        this.setState({ showExampleHaiku: b },  () => {
-            console.log(`this.state.showExampleHaiku`, this.state.showExampleHaiku);
-          });
+        this.setState({ showExampleHaiku: b });
     }
 
     render() {
