@@ -3,28 +3,13 @@ import Fade from '@mui/material/Fade';
 import * as THREE from 'three'
 import { render, events } from '@react-three/fiber'
 import Matsuo from './Matsuo'
-
-function CanvasElement(props) {
-    if (props.showMatsuo) {
-        return (
-            <Fade in={true} >
-                <canvas style={{ width: '25vh', height: '25vh' }} />
-            </Fade>
-        );
-    } else {
-        return(
-            <Fade in={true} transition={3000}>
-                <p>HI THERE</p>
-            </Fade>
-        )
-    }
-}
+import exampleHaiku from '../../assets/exampleHaiku.png'
+import { height } from '@mui/system';
 
 export default class Canvas extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { showMatsuo: props.showMatsuo }
     }
 
     componentDidMount() {
@@ -36,8 +21,6 @@ export default class Canvas extends React.Component {
             events,
             linear: true,
             camera: { fov: 30, position: [0, 0, 6] },
-            // https://barradeau.com/blog/?p=621
-            // This examples needs WebGL1 (?)
             gl: new THREE.WebGL1Renderer({
                 canvas: document.querySelector('canvas'),
                 antialias: true,
@@ -46,17 +29,24 @@ export default class Canvas extends React.Component {
         })
     }
 
+
     render() {
         return (
-            <div>
-                <CanvasElement showMatsuo={this.state.showMatsuo} />
-                <p><a onClick={() => this.setState({ showMatsuo: !this.state.showMatsuo })}>
-                    SHIT
-                </a></p>
-            </div>
-            // <Fade in={true} >
-            //     <canvas style={{ width: '25vh', height: '25vh' }} />
-            // </Fade>
-        );
+            <>
+                <Fade in={true} transition={3000}>
+                    <img
+                        src={exampleHaiku}
+                        style={{ height: '50vh' }}
+                        className={this.props.showExampleHaiku ? '' : 'hidden'}
+                    />
+                </Fade>
+                <Fade in={true}>
+                    <canvas
+                        style={{ width: '25vh', height: '25vh' }}
+                        className={this.props.showExampleHaiku ? 'hidden': ''}
+                    />
+                </Fade>
+            </>
+        )
     }
 }

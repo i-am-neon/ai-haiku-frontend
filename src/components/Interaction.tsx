@@ -1,7 +1,11 @@
 import * as React from 'react';
 import Fade from '@mui/material/Fade';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import { INITIAL_GREETING, speech } from './speech';
+import { FAQ_HAIKU_EXAMPLE, HAIKU_EXAMPLE, INITIAL_GREETING, speech } from './speech';
+
+interface InteractionProps {
+    setShowExampleHaiku: any
+}
 
 interface InteractionState {
     matsuosSpeech: string,
@@ -10,12 +14,15 @@ interface InteractionState {
     userSpeechIndexToFade: number
 }
 
-class Interaction extends React.Component<{}, InteractionState> {
-    state = {
-        matsuosSpeech: '',
-        matsuosSpeechIndexToFade: -1,
-        userSpeech: [''],
-        userSpeechIndexToFade: -1
+class Interaction extends React.Component<InteractionProps, InteractionState> {
+    constructor(props: InteractionProps) {
+        super(props);
+        this.state = {
+            matsuosSpeech: '',
+            matsuosSpeechIndexToFade: -1,
+            userSpeech: [''],
+            userSpeechIndexToFade: -1
+        }
     }
 
     async componentDidMount() {
@@ -39,6 +46,12 @@ class Interaction extends React.Component<{}, InteractionState> {
     }
 
     async updateInteraction(newSpeechName: string) {
+
+        if (newSpeechName === HAIKU_EXAMPLE || newSpeechName === FAQ_HAIKU_EXAMPLE) {
+            this.props.setShowExampleHaiku(true);
+        } else {
+            this.props.setShowExampleHaiku(false);
+        }
         const newSpeech = this.getSpeechByName(newSpeechName);
         this.setState({
             matsuosSpeechIndexToFade: -1,

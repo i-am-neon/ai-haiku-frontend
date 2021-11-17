@@ -9,12 +9,12 @@ const HOW_WE_COLLABORATE_1 = 'howWeCollaborate1';
 const HOW_WE_COLLABORATE_2 = 'howWeCollaborate2';
 const HOW_WE_COLLABORATE_3 = 'howWeCollaborate3';
 const HOW_WE_COLLABORATE_4 = 'howWeCollaborate4';
-const HAIKU_EXAMPLE = 'haikuExample';
+export const HAIKU_EXAMPLE = 'haikuExample';
 const FAQ_MAIN = 'faqMain';
 const WUT_NFT = 'wutNft';
 const HOW_TO_WALLET = 'howToWallet';
 const HOW_TO_MINT = 'howToMint';
-const FAQ_HAIKU_EXAMPLE = 'faqHaikuExample';
+export const FAQ_HAIKU_EXAMPLE = 'faqHaikuExample';
 
 const HAIKU_EXAMPLE_MATSUO_TEXT = `BLAH!`
 
