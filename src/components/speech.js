@@ -1,15 +1,22 @@
 
 export const INITIAL_GREETING = 'initialGreeting';
-export const WHO_ARE_YOU_1 = 'whoAreYou1';
-export const WHO_ARE_YOU_2 = 'whoAreYou2';
-export const WHAT_IS_AI_HAIKU = 'whatIsAiHaiku';
-export const THE_TECH_AI = 'theTechAi';
-export const THE_TECH_BLOCKCHAIN = 'theTechBlockchain';
-export const HOW_WE_COLLABORATE_1 = 'howWeCollaborate1';
-export const HOW_WE_COLLABORATE_2 = 'howWeCollaborate2';
-export const HOW_WE_COLLABORATE_3 = 'howWeCollaborate3';
-export const HOW_WE_COLLABORATE_4 = 'howWeCollaborate4';
-export const HAIKU_EXAMPLE = 'haikuExample';
+const WHO_ARE_YOU_1 = 'whoAreYou1';
+const WHO_ARE_YOU_2 = 'whoAreYou2';
+const WHAT_IS_AI_HAIKU = 'whatIsAiHaiku';
+const THE_TECH_AI = 'theTechAi';
+const THE_TECH_BLOCKCHAIN = 'theTechBlockchain';
+const HOW_WE_COLLABORATE_1 = 'howWeCollaborate1';
+const HOW_WE_COLLABORATE_2 = 'howWeCollaborate2';
+const HOW_WE_COLLABORATE_3 = 'howWeCollaborate3';
+const HOW_WE_COLLABORATE_4 = 'howWeCollaborate4';
+const HAIKU_EXAMPLE = 'haikuExample';
+const FAQ_MAIN = 'faqMain';
+const WUT_NFT = 'wutNft';
+const HOW_TO_WALLET = 'howToWallet';
+const HOW_TO_MINT = 'howToMint';
+const FAQ_HAIKU_EXAMPLE = 'faqHaikuExample';
+
+const HAIKU_EXAMPLE_MATSUO_TEXT = `BLAH!`
 
 export const speech = [
     {
@@ -27,7 +34,7 @@ export const speech = [
                 },
                 {
                     question: 'I\'ve got some specific questions.',
-                    redirectToAnswer: WHO_ARE_YOU_1
+                    redirectToAnswer: FAQ_MAIN
                 },
             ]
         }
@@ -36,12 +43,12 @@ export const speech = [
         name: WHO_ARE_YOU_1,
         data: {
             matsuo: `I am an artificial intelligence entity created to emulate Matsuo Bashō, widely recognized as
-                    the greatest master of haiku. The dataset I was trained on includes but is not limited to Bashō's
+                    the greatest master of haiku ever to live. The dataset I was trained on includes but is not limited to Bashō's
                     life, second-hand accounts of his actions, and all known works.`,
             user: [
                 {
                     question: 'Interesting. But why here? Why now?',
-                    redirectToAnswer: INITIAL_GREETING
+                    redirectToAnswer: WHO_ARE_YOU_2
                 },
             ]
         }
@@ -52,14 +59,15 @@ export const speech = [
             matsuo: `The real Matsuo Bashō died on November 28th, 1694. We will honor Bashō by continuing the tradition of the haiku
                     using new technological mediums. On November 28th, 2021, we will celebrate Bashō's life by working together
                     to create haikus of our own as "AI Haiku" NFTs.`,
+            // matsuo: `The real Matsuo Bashō died on November 28th, 1694. He will come back to life as me...`,
             user: [
                 {
                     question: 'What is AI Haiku?',
                     redirectToAnswer: WHAT_IS_AI_HAIKU
                 },
                 {
-                    question: 'Thank you.',
-                    redirectToAnswer: INITIAL_GREETING
+                    question: 'Thank you. I have some specific questions.',
+                    redirectToAnswer: FAQ_MAIN
                 },
             ]
         }
@@ -73,11 +81,11 @@ export const speech = [
                     as an NFT on the Ethereum blockchain.`,
             user: [
                 {
-                    question: 'How will we collaborate?.',
+                    question: 'How will we collaborate?',
                     redirectToAnswer: HOW_WE_COLLABORATE_1
                 },
                 {
-                    question: 'What will these poems look like?.',
+                    question: 'What will these poems look like?',
                     redirectToAnswer: HAIKU_EXAMPLE
                 },
                 {
@@ -178,17 +186,115 @@ export const speech = [
     {
         name: HAIKU_EXAMPLE,
         data: {
-            matsuo: `🍑🍑🍑🍑🍑🍑🍑🍑🍑🍑🍑🍑🍑🍑`,
+            matsuo: HAIKU_EXAMPLE_MATSUO_TEXT,
             user: [
                 {
                     question: 'How will we collaborate?',
                     redirectToAnswer: HOW_WE_COLLABORATE_1
                 },
                 {
-                    question: 'What will these poems look like?.',
+                    question: 'What will these poems look like?',
                     redirectToAnswer: HAIKU_EXAMPLE
                 },
             ]
         }
     },
+    {
+        name: FAQ_MAIN,
+        data: {
+            matsuo: `Yes of course. What are you interested in learning?`,
+            user: [
+                {
+                    question: 'What is an NFT and how do I buy one?',
+                    redirectToAnswer: WUT_NFT
+                },
+                {
+                    question: 'What do the NFTs look like, and what do I get when I mint one?',
+                    redirectToAnswer: FAQ_HAIKU_EXAMPLE
+                },
+                {
+                    question: 'What is the mint date and price?',
+                    redirectToAnswer: HAIKU_EXAMPLE
+                },
+                {
+                    question: 'Who created this?',
+                    redirectToAnswer: HAIKU_EXAMPLE
+                },
+            ]
+        }
+    },
+    {
+        name: WUT_NFT,
+        data: {
+            matsuo: `I see you're new to this space. Welcome, I am truly excited for you to explore the world of programmable art.
+                    An NFT stands for Non-Fungible Token. It is... BLAH.
+                    To get one, you'll need an Ethereum wallet like Metamask or Coinbase Wallet with some Ether,
+                    the currency used on the Ethereum blockchain.`,
+            user: [
+                {
+                    question: 'How do I get one of these wallets?',
+                    redirectToAnswer: HOW_TO_WALLET
+                },
+                {
+                    question: 'I\'d like to ask another question.',
+                    redirectToAnswer: FAQ_MAIN
+                },
+            ]
+        }
+    },
+    {
+        name: HOW_TO_WALLET,
+        data: {
+            matsuo: `First you'll need Ether. Create an account on an exchange such as Coinbase, Kraken, or FTX and connect your bank account.
+                    If you used Coinbase, you can follow their instructions on how to use their browser extension wallet.
+                    Otherwise, I'd recommend creating a Metamask wallet and transfering some Ether to it. Don't forget
+                    to have a bit more on hand for the gas price! That is the fee associated with any transaction that happens on Ethereum.`,
+            user: [
+                {
+                    question: 'Tell me how to create a Metamask wallet. \r',
+                    redirectToAnswer: HOW_TO_WALLET
+                },
+                {
+                    question: 'What do I do after that?',
+                    redirectToAnswer: HOW_TO_MINT
+                },
+                {
+                    question: 'I\'d like to ask another question.',
+                    redirectToAnswer: FAQ_MAIN
+                },
+            ]
+        }
+    },
+    {
+        name: HOW_TO_MINT,
+        data: {
+            matsuo: `On November 28th, 2021 at 0:00 JST (Japan Standard Time), visit this website and talk to me to begin the 'minting' process.
+                    To 'mint' an NFT is to create the token that proves ownership of your haiku on the blockchain and adds this
+                    token to your wallet. After that you'll be able to view your new NFT, sell it on OpenSea, and
+                    even adorn the walls of your metaverse home with it!`,
+            user: [
+                {
+                    question: 'How do I view my NFTs on OpenSea? \r',
+                    redirectToAnswer: HOW_TO_WALLET
+                },
+                {
+                    question: 'Thanks for the information. Could I ask you something else?',
+                    redirectToAnswer: FAQ_MAIN
+                },
+            ]
+        }
+    },
+    {
+        name: FAQ_HAIKU_EXAMPLE,
+        data: {
+            matsuo: HAIKU_EXAMPLE_MATSUO_TEXT,
+            user: [
+                {
+                    question: 'Thanks for the information. Could I ask you something else?',
+                    redirectToAnswer: FAQ_MAIN
+                },
+            ]
+        }
+    },
+
 ]

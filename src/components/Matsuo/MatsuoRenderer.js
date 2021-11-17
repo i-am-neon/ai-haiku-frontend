@@ -1,12 +1,36 @@
 import React from 'react';
+import Fade from '@mui/material/Fade';
 import * as THREE from 'three'
 import { render, events } from '@react-three/fiber'
 import Matsuo from './Matsuo'
 
+function CanvasElement(props) {
+    if (props.showMatsuo) {
+        return (
+            <Fade in={true} >
+                <canvas style={{ width: '25vh', height: '25vh' }} />
+            </Fade>
+        );
+    } else {
+        return(
+            <Fade in={true} transition={3000}>
+                <p>HI THERE</p>
+            </Fade>
+        )
+    }
+}
+
 export default class Canvas extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = { showMatsuo: props.showMatsuo }
+    }
+
     componentDidMount() {
         this.updateCanvas();
     }
+
     updateCanvas() {
         render(<Matsuo />, document.querySelector('canvas'), {
             events,
@@ -21,9 +45,18 @@ export default class Canvas extends React.Component {
             })
         })
     }
+
     render() {
         return (
-            <canvas style={{ width: '25vh', height: '25vh' }} />
+            <div>
+                <CanvasElement showMatsuo={this.state.showMatsuo} />
+                <p><a onClick={() => this.setState({ showMatsuo: !this.state.showMatsuo })}>
+                    SHIT
+                </a></p>
+            </div>
+            // <Fade in={true} >
+            //     <canvas style={{ width: '25vh', height: '25vh' }} />
+            // </Fade>
         );
     }
 }

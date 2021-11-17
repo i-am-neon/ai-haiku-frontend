@@ -4,7 +4,7 @@ import MatsuoRenderer from './Matsuo/MatsuoRenderer';
 export default function Home() {
     return (
         <>
-            <MatsuoRenderer />
+            <MatsuoRenderer showMatsuo={true} />
             <Interaction />
         </>
     );

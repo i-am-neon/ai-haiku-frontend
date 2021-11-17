@@ -59,7 +59,7 @@ class Interaction extends React.Component<{}, InteractionState> {
             let n;
             if (speechArray[i] === '\n') {
                 // New line
-                n = (<><br /></>)
+                n = (<><br key={i} /></>)
             } else {
                 n = (
                     <Fade in={this.state.matsuosSpeechIndexToFade >= i} key={i}>
@@ -77,16 +77,26 @@ class Interaction extends React.Component<{}, InteractionState> {
         for (let i = 0; i < userSpeechList.length; i++) {
             let n;
             if (userSpeechList[i]?.question?.includes('\r')) {
-                // For 'open in new tab' icon on HOW_WE_COLLABORATE_2 for opening the /paper page.
+                // For 'open in new tab' icon
+                let redirectLink = '';
+                if (userSpeechList[i]?.question?.toLowerCase().includes('paper')) {
+                    redirectLink = '/paper';
+                }
+                if (userSpeechList[i]?.question?.toLowerCase().includes('metamask')) {
+                    redirectLink = 'https://metamask.io';
+                }
+                if (userSpeechList[i]?.question?.toLowerCase().includes('opensea')) {
+                    redirectLink = 'http://opensea.io/account';
+                }
                 n = (
                     <>
                         <Fade in={this.state.userSpeechIndexToFade >= i} key={i}>
-                            <p><a href="/paper" target="_blank">
+                            <p><a href={redirectLink} target="_blank">
                                 {userSpeechList[i].question} <OpenInNewIcon fontSize="small" />
                             </a></p>
                         </Fade>
                     </>
-                )
+                );
             } else {
                 n = (
                     <>
