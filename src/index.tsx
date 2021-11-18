@@ -31,7 +31,7 @@ declare global {
 
 ReactDOM.render(
   <React.StrictMode>
-    <div style={{minHeight: '100vh'}}>
+    <div style={{minHeight: '100vh', position: 'relative'}}>
       <div style={{paddingBottom: '2.5rem'}}>
         <App />
       </div>
