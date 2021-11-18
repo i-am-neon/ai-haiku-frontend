@@ -21,7 +21,7 @@ const MINT_DEETS = 'mintDeets';
 const WHO_DUNNIT = 'whoDunnit';
 
 const HAIKU_EXAMPLE_MATSUO_TEXT = `Behold: this is what your haiku may look like.
-                    The background will be one of four paper types, more information on our papers page.
+                    The background will be one of four types of traditional handmade Japanese paper.
                     I will translate the haiku title you so gracefully provided into my mother tongue, Japanese. The title will go in the top right of the paper.
                     The center contains the haiku you choose of the three I create given the inspiration of your title.
                     Finally, the bottom left will be a piece of generative art; brush strokes created with randomness

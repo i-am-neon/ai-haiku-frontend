@@ -25,7 +25,8 @@ export default class Canvas extends React.Component {
                 canvas: document.querySelector('canvas'),
                 antialias: true,
                 alpha: true
-            })
+            }),
+            size: { width: window.innerWidth * .9, height: window.innerHeight * .4}
         })
     }
 
@@ -41,10 +42,7 @@ export default class Canvas extends React.Component {
                     />
                 </Fade>
                 <Fade in={true}>
-                    <canvas
-                        style={{ width: '25vh', height: '25vh' }}
-                        className={this.props.showExampleHaiku ? 'hidden': ''}
-                    />
+                    <canvas className={this.props.showExampleHaiku ? 'hidden': ''} />
                 </Fade>
             </>
         )

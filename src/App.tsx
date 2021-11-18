@@ -4,6 +4,8 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Home from './components/Home';
 import NavBar from './components/NavBar';
 import TermsAndConditions from './components/TermsAndConditions';
+import Paper from './components/Paper';
+import Footer from './components/Footer';
 
 const Web3Connection = lazy(() => import('./web3/Web3Connection'));
 
@@ -16,10 +18,11 @@ function App() {
           <Switch>
             <Route path='/mint' component={Web3Connection}></Route>
             <Route path='/terms' component={TermsAndConditions}></Route>
-            <Route path='/paper' component={Web3Connection}></Route>
+            <Route path='/paper' component={Paper}></Route>
             <Route path='/' component={Home}></Route>
           </Switch>
         </Suspense>
+        <Footer />
       </BrowserRouter>
     </div>
   );
