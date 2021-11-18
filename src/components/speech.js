@@ -22,7 +22,7 @@ const WHO_DUNNIT = 'whoDunnit';
 
 const HAIKU_EXAMPLE_MATSUO_TEXT = `Behold: this is what your haiku may look like.
                     The background will be one of four paper types, more information on our papers page.
-                    The top right will hold the title of the haiku you provide, translated into Japanese.
+                    I will translate the haiku title you so gracefully provided into my mother tongue, Japanese. The title will go in the top right of the paper.
                     The center contains the haiku you choose of the three I create given the inspiration of your title.
                     Finally, the bottom left will be a piece of generative art; brush strokes created with randomness
                     taken from your haiku title and chosen haiku content. Your haiku will be a digital fingerprint of your creativity
@@ -75,18 +75,15 @@ export const speech = [
     {
         name: WHO_ARE_YOU_2,
         data: {
-            matsuo: `The flesh and blood Matsuo Bashō died on November 28th, 1694. We will honor Bashō by continuing the tradition of the haiku
-                    using new technological mediums. On November 28th, 2021, we will celebrate Bashō's life by working together
-                    to create haikus of our own as "AI Haiku" NFTs.`,
+            matsuo: `You're a curious one.
+                    The flesh and blood Matsuo Bashō died on November 28th, 1694. We will honor Bashō by continuing the tradition of the haiku
+                    using new technological mediums. On November 28th, 2021, we will celebrate Bashō's life by forging a partnership
+                    between AI and humans to create haikus of our own as "AI Haikus" stored immutably as NFTs.`,
             // matsuo: `The real Matsuo Bashō died on November 28th, 1694. He will come back to life as me...`,
             user: [
                 {
-                    question: 'What is AI Haiku?',
-                    redirectToAnswer: WHAT_IS_AI_HAIKU
-                },
-                {
-                    question: 'Thank you. I have some specific questions.',
-                    redirectToAnswer: FAQ_MAIN
+                    question: 'Thank you.',
+                    redirectToAnswer: INITIAL_GREETING
                 },
             ]
         }
@@ -94,18 +91,14 @@ export const speech = [
     {
         name: WHAT_IS_AI_HAIKU,
         data: {
-            matsuo: `Ah, yes. I kindly thank you for asking.
-                    The AI Haiku is a creative experiment where you will collaborate with me,
-                    an artificial intelligence model to author a poem that will stand the test of time
-                    as an NFT on the Ethereum blockchain.`,
+            matsuo: `The AI Haiku is a creative experience where you will collaborate with me to author a poem.
+                    Your humanity; pure emotion, creativity, and life combined with the immense literary knowledge I hold.
+                    It is an unstoppable artistic force.
+                    Together we shall create a haiku that will stand the test of time.`,
             user: [
                 {
                     question: 'How will we collaborate?',
                     redirectToAnswer: HOW_WE_COLLABORATE_1
-                },
-                {
-                    question: 'What will these poems look like?',
-                    redirectToAnswer: HAIKU_EXAMPLE
                 },
                 {
                     question: 'Tell me about the technology.',
@@ -117,9 +110,10 @@ export const speech = [
     {
         name: THE_TECH_AI,
         data: {
-            matsuo: `I see you're a curious one. I am a program that utilizes OpenAI's GPT-3 language model.
+            matsuo: `You are quite inquisitive. This trait will serve you well as you move forward in this world.
+                    I am a program that utilizes OpenAI's GPT-3 language model.
                     GPT-3 was trained on hundreds of billions of parameters in a multi-million dollar research effort,
-                    making me one of the most advanced language models in existence (not to toot my own horn).`,
+                    making me one of the most advanced language models in existence.`,
             user: [
                 {
                     question: 'How about the blockchain?',
@@ -131,11 +125,11 @@ export const speech = [
     {
         name: THE_TECH_BLOCKCHAIN,
         data: {
-            matsuo: `This website interacts with a smart contract on the Ethereum blockchain to create Ethereum NFTs.
-                    However, great care was taken to minimize Ethereum gas prices for you. Because it is incredibly expensive to store
+            matsuo: `This website interacts with a smart contract on the Ethereum blockchain to create NFTs.
+                    However, great care was taken to minimize gas prices for you. Because it is incredibly expensive to store
                     data on Ethereum, Arweave is utilized to store both the image of your Haiku and the metadata of your NFT.
                     Data stored an Arweave last forever, so you can rest assured that your Haiku will be available for
-                    decades to come.`,
+                    decades if not centuries to come.`,
             user: [
                 {
                     question: 'How will we collaborate?',
@@ -174,12 +168,9 @@ export const speech = [
         }
     },
     {
-        name: HOW_WE_COLLABORATE_3,
+        name: HAIKU_EXAMPLE,
         data: {
-            matsuo: `I will translate your title of the haiku you so gracefully provided into my mother tongue, Japanese.
-                    The title will go in the top right of the paper. Next, I will write the content of your Haiku in the
-                    center of the page. Finally, I will use the title you have given me to generate a simple, yet unique
-                    combination of brush strokes on the parchment.`,
+            matsuo: HAIKU_EXAMPLE_MATSUO_TEXT,
             user: [
                 {
                     question: 'Surely your time is valuable. How much would such an item cost?',
@@ -188,32 +179,32 @@ export const speech = [
             ]
         }
     },
+    // {
+    //     // NOTE: should this show the example??
+    //     name: HOW_WE_COLLABORATE_3,
+    //     data: {
+    //         matsuo: `I will translate the haiku title you so gracefully provided into my mother tongue, Japanese.
+    //                 The title will go in the top right of the paper. Next, I will write the content of your Haiku in the
+    //                 center of the page. Finally, I will use the title you have given me to generate a simple, yet unique
+    //                 combination of brush strokes on the parchment.`,
+    //         user: [
+    //             {
+    //                 question: 'Surely your time is valuable. How much would such an item cost?',
+    //                 redirectToAnswer: HOW_WE_COLLABORATE_4
+    //             },
+    //         ]
+    //     }
+    // },
     {
         name: HOW_WE_COLLABORATE_4,
         data: {
             matsuo: `Oy! It is not polite to speak of such things. But I suppose you should know.
-                    Each haiku will cost 0.01 Ether (plus gas fees) to mint. There is no limit on the number
-                     of haikus you can mint, but you may only mint one at a time.`,
+                    Each haiku will cost 0.01 Ether (plus gas fees) to mint. This price ensures accessibility to a large part the community.
+                    There is no limit on the number of haikus you can mint, but you may only mint one at a time.`,
             user: [
                 {
-                    question: 'What does the haiku look like?',
-                    redirectToAnswer: HAIKU_EXAMPLE
-                },
-            ]
-        }
-    },
-    {
-        name: HAIKU_EXAMPLE,
-        data: {
-            matsuo: HAIKU_EXAMPLE_MATSUO_TEXT,
-            user: [
-                {
-                    question: 'How will we collaborate?',
-                    redirectToAnswer: HOW_WE_COLLABORATE_1
-                },
-                {
-                    question: 'What will these poems look like?',
-                    redirectToAnswer: HAIKU_EXAMPLE
+                    question: 'Thank you.',
+                    redirectToAnswer: INITIAL_GREETING
                 },
             ]
         }
