@@ -99,7 +99,10 @@ class Interaction extends React.Component<InteractionProps, InteractionState> {
                     redirectLink = 'https://metamask.io';
                 }
                 if (userSpeechList[i]?.question?.toLowerCase().includes('opensea')) {
-                    redirectLink = 'http://opensea.io/account';
+                    redirectLink = 'https://opensea.io/account';
+                }
+                if (userSpeechList[i]?.question?.toLowerCase().includes('twitter')) {
+                    redirectLink = 'https://twitter.com/0xNeon';
                 }
                 n = (
                     <>

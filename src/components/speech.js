@@ -15,7 +15,10 @@ const WUT_NFT = 'wutNft';
 const HOW_TO_WALLET = 'howToWallet';
 const HOW_TO_MINT = 'howToMint';
 export const FAQ_HAIKU_EXAMPLE = 'faqHaikuExample';
-const FAQ_WHAT_GET_WHEN_MINT = 'whatGetWhenMint';
+const FAQ_WHAT_GET_WHEN_MINT_1 = 'whatGetWhenMint1';
+const FAQ_WHAT_GET_WHEN_MINT_2 = 'whatGetWhenMint2';
+const MINT_DEETS = 'mintDeets';
+const WHO_DUNNIT = 'whoDunnit';
 
 const HAIKU_EXAMPLE_MATSUO_TEXT = `Behold: this is what your haiku may look like.
                     The background will be one of four paper types, more information on our papers page.
@@ -24,7 +27,15 @@ const HAIKU_EXAMPLE_MATSUO_TEXT = `Behold: this is what your haiku may look like
                     Finally, the bottom left will be a piece of generative art; brush strokes created with randomness
                     taken from your haiku title and chosen haiku content. Your haiku will be a digital fingerprint of your creativity
                     enhanced by cutting-edge technology to celebrate an age-old tradition.`;
-const WHAT_GET_WHEN_MINT_MATSUO_TEXT = `One of this, one of that...`;                
+const WHAT_GET_WHEN_MINT_MATSUO_TEXT_1 = `Upon minting an AI Haiku, you will recieve the NFT with a high resolution image of the haiku you and I created.
+                    Because you played a key role in the haiku's creation, the you will own the intellectual property and
+                    commercial rights of your AI Haiku. If you sell your work, those rights are transferred to the new owner.
+                    Your haiku will live immutably on the blockchain forever. Such an art form should be cherished and may even be
+                    passed down to the next generation.`;                
+const WHAT_GET_WHEN_MINT_MATSUO_TEXT_2 = `I'm glad you asked. Additionally, you are entitled to a physical copy of your haiku.
+                    It will be printed on paper handmade in Japan and include a QR code that points to the NFT version of the work.
+                    I will ship your haiku anywhere in the world for free. However, if you do not opt in to receiving a physical
+                    copy, I will donate the funds it would have cost to create your paper haiku to a charity voted on by the community.`;                
 
 export const speech = [
     {
@@ -181,8 +192,8 @@ export const speech = [
         name: HOW_WE_COLLABORATE_4,
         data: {
             matsuo: `Oy! It is not polite to speak of such things. But I suppose you should know.
-                    Each haiku will cost 0.01 Ether (plus gas prices) to mint. There is no limit on the number
-                    of haikus you can mint, but you may only mint one at a time.`,
+                    Each haiku will cost 0.01 Ether (plus gas fees) to mint. There is no limit on the number
+                     of haikus you can mint, but you may only mint one at a time.`,
             user: [
                 {
                     question: 'What does the haiku look like?',
@@ -222,11 +233,11 @@ export const speech = [
                 },
                 {
                     question: 'What is the mint date and price?',
-                    redirectToAnswer: HAIKU_EXAMPLE
+                    redirectToAnswer: MINT_DEETS
                 },
                 {
                     question: 'Who created this?',
-                    redirectToAnswer: HAIKU_EXAMPLE
+                    redirectToAnswer: WHO_DUNNIT
                 },
             ]
         }
@@ -235,7 +246,8 @@ export const speech = [
         name: WUT_NFT,
         data: {
             matsuo: `I see you're new to this space. Welcome, I am truly excited for you to explore the world of programmable art.
-                    An NFT stands for Non-Fungible Token. It is... BLAH.
+                    An NFT stands for Non-Fungible Token. These tokens are essentially digital items that live in the blockchain.
+                    In this case, the token is a piece of art that’s been “minted” on the Ethereum blockchain that is one-of-a-kind and fully yours to own.
                     To get one, you'll need an Ethereum wallet like Metamask or Coinbase Wallet with some Ether,
                     the currency used on the Ethereum blockchain.`,
             user: [
@@ -276,13 +288,13 @@ export const speech = [
     {
         name: HOW_TO_MINT,
         data: {
-            matsuo: `On November 28th, 2021 at 0:00 JST (Japan Standard Time), visit this website and talk to me to begin the 'minting' process.
-                    To 'mint' an NFT is to create the token that proves ownership of your haiku on the blockchain and adds this
+            matsuo: `On November 28th, 2021 at 0:00 JST (Japan Standard Time), visit this website and talk to me to begin the "minting" process.
+                    To mint an NFT is to create the token that proves ownership of your haiku on the blockchain and adds this
                     token to your wallet. After that you'll be able to view your new NFT, sell it on OpenSea, and
                     even adorn the walls of your metaverse home with it!`,
             user: [
                 {
-                    question: 'How do I view my NFTs on OpenSea? \r',
+                    question: 'I\'d like to view my NFTs on OpenSea. \r',
                     redirectToAnswer: HOW_TO_WALLET
                 },
                 {
@@ -298,8 +310,8 @@ export const speech = [
             matsuo: HAIKU_EXAMPLE_MATSUO_TEXT,
             user: [
                 {
-                    question: 'Beautiful. What do I get when I mint one?',
-                    redirectToAnswer: FAQ_WHAT_GET_WHEN_MINT
+                    question: 'Beautiful. And what do I get when I mint one?',
+                    redirectToAnswer: FAQ_WHAT_GET_WHEN_MINT_1
                 },
                 {
                     question: 'Show me the different paper types. \r'
@@ -312,10 +324,55 @@ export const speech = [
         }
     },
     {
-        name: FAQ_WHAT_GET_WHEN_MINT,
+        name: FAQ_WHAT_GET_WHEN_MINT_1,
         data: {
-            matsuo: WHAT_GET_WHEN_MINT_MATSUO_TEXT,
+            matsuo: WHAT_GET_WHEN_MINT_MATSUO_TEXT_1,
             user: [
+                {
+                    question: 'Is this a purely digital form of art?',
+                    redirectToAnswer: FAQ_WHAT_GET_WHEN_MINT_2
+                },
+                {
+                    question: 'Thanks for the information. Could I ask you something else?',
+                    redirectToAnswer: FAQ_MAIN
+                },
+            ]
+        }
+    },
+    {
+        name: FAQ_WHAT_GET_WHEN_MINT_2,
+        data: {
+            matsuo: WHAT_GET_WHEN_MINT_MATSUO_TEXT_2,
+            user: [
+                {
+                    question: 'Thanks for the information. Could I ask you something else?',
+                    redirectToAnswer: FAQ_MAIN
+                },
+            ]
+        }
+    },
+    {
+        name: MINT_DEETS,
+        data: {
+            matsuo: `On November 28th, 2021 at 0:00 JST (Japan Standard Time), visit this website and talk to me to begin the "minting" process.
+                    Each haiku will cost 0.01 Ether (plus gas fees) to mint. There is no limit on the numberof haikus you can mint,
+                    but you may only mint one at a time.`,
+            user: [
+                {
+                    question: 'Thanks for the information. Could I ask you something else?',
+                    redirectToAnswer: FAQ_MAIN
+                },
+            ]
+        }
+    },
+    {
+        name: WHO_DUNNIT,
+        data: {
+            matsuo: `This project was authored by NΞ◎N.`,
+            user: [
+                {
+                    question: 'I\'d like to see what NΞ◎N is up to on Twitter. \r',
+                },
                 {
                     question: 'Thanks for the information. Could I ask you something else?',
                     redirectToAnswer: FAQ_MAIN
