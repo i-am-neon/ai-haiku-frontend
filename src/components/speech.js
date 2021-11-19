@@ -78,7 +78,7 @@ export const speech = [
             matsuo: `You're a curious one.
                     The flesh and blood Matsuo Bashō died on November 28th, 1694. We will honor Bashō by continuing the tradition of the haiku
                     using new technological mediums. On November 28th, 2021, we will celebrate Bashō's life by forging a partnership
-                    between AI and humans to create haikus of our own as "AI Haikus" stored immutably as NFTs.`,
+                    between AI and humans to create art own as "AI Haikus" stored immutably as NFTs.`,
             // matsuo: `The real Matsuo Bashō died on November 28th, 1694. He will come back to life as me...`,
             user: [
                 {
