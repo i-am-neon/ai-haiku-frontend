@@ -25,8 +25,8 @@ const HAIKU_EXAMPLE_MATSUO_TEXT = `Behold: this is what your haiku may look like
                     I will translate the haiku title you so gracefully provided into my mother tongue, Japanese. The title will go in the top right of the paper.
                     The center contains the haiku you choose of the three I create given the inspiration of your title.
                     Finally, the bottom left will be a piece of generative art; brush strokes created with randomness
-                    taken from your haiku title and chosen haiku content. Your haiku will be a digital fingerprint of your creativity
-                    enhanced by cutting-edge technology to celebrate an age-old tradition.`;
+                    taken from your haiku title and chosen haiku content. These properties will create endless possibilities; no two haikus will be the same.
+                    Your haiku will be a digital fingerprint of your creativity enhanced by cutting-edge technology to celebrate an age-old tradition.`;
 const WHAT_GET_WHEN_MINT_MATSUO_TEXT_1 = `Upon minting an AI Haiku, you will recieve the NFT with a high resolution image of the haiku you and I created.
                     Because you played a key role in the haiku's creation, the you will own the intellectual property and
                     commercial rights of your AI Haiku. If you sell your work, those rights are transferred to the new owner.
@@ -66,7 +66,7 @@ export const speech = [
                     life, second-hand accounts of his actions, and all known works.`,
             user: [
                 {
-                    question: 'Interesting. But why here? Why now?',
+                    question: 'What are you doing here?',
                     redirectToAnswer: WHO_ARE_YOU_2
                 },
             ]
@@ -91,10 +91,11 @@ export const speech = [
     {
         name: WHAT_IS_AI_HAIKU,
         data: {
-            matsuo: `The AI Haiku is a creative experience where you will collaborate with me to author a poem.
-                    Your humanity; pure emotion, creativity, and life combined with the immense literary knowledge I hold.
-                    It is an unstoppable artistic force.
-                    Together we shall create a haiku that will stand the test of time.`,
+            matsuo: `The AI Haiku is an experimental creative experience where you will collaborate with me to author a haiku.
+                    Your humanity; pure emotion, creativity, and life will combine with the immense literary knowledge
+                    I hold to create something truly unique. It is an unstoppable artistic force.
+                    You will become part of history by taking part in this new way humans and computers collaborate
+                    by co-creating art in a way never before seen. Together we shall create haikus that will stand the test of time.`,
             user: [
                 {
                     question: 'How will we collaborate?',
