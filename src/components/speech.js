@@ -22,12 +22,12 @@ const WHO_DUNNIT = 'whoDunnit';
 
 const HAIKU_EXAMPLE_MATSUO_TEXT = `Behold: this is what your haiku may look like.
                     The background will be one of four types of traditional handmade Japanese paper.
-                    I will translate the haiku title you so gracefully provided into my mother tongue, Japanese. The title will go in the top right of the paper.
+                    I will translate the haiku title you so gracefully provide into my mother tongue, Japanese. The title will go in the top right of the paper.
                     The center contains the haiku you choose of the three I create given the inspiration of your title.
-                    Finally, the bottom left will be a piece of generative art; brush strokes created with randomness
-                    taken from your haiku title and chosen haiku content. These properties will create endless possibilities; no two haikus will be the same.
-                    Your haiku will be a digital fingerprint of your creativity enhanced by cutting-edge technology to celebrate an age-old tradition.`;
-const WHAT_GET_WHEN_MINT_MATSUO_TEXT_1 = `Upon minting an AI Haiku, you will recieve the NFT with a high resolution image of the haiku you and I created.
+                    Finally, the bottom left will be a piece of generative art; brush strokes created with randomness taken from your haiku title and chosen haiku content.
+                    These properties will create endless possibilities. No two haikus will be the same.
+                    Your haiku will be a digital fingerprint of your creativity enhanced by cutting-edge technology to celebrate the age-old tradition of poetry and art.`;
+const WHAT_GET_WHEN_MINT_MATSUO_TEXT_1 = `Upon minting an AI Haiku, you will recieve the high resolution image of the haiku you and I created as an NFT, digital proof that you own the haiku.
                     Because you played a key role in the haiku's creation, the you will own the intellectual property and
                     commercial rights of your AI Haiku. If you sell your work, those rights are transferred to the new owner.
                     Your haiku will live immutably on the blockchain forever. Such an art form should be cherished and may even be
@@ -91,11 +91,11 @@ export const speech = [
     {
         name: WHAT_IS_AI_HAIKU,
         data: {
-            matsuo: `The AI Haiku is an experimental creative experience where you will collaborate with me to author a haiku.
+            matsuo: `The AI Haiku is a creative experience where you will collaborate with me to author a haiku.
                     Your humanity; pure emotion, creativity, and life will combine with the immense literary knowledge
-                    I hold to create something truly unique. It is an unstoppable artistic force.
-                    You will become part of history by taking part in this new way humans and computers collaborate
-                    by co-creating art in a way never before seen. Together we shall create haikus that will stand the test of time.`,
+                    I hold to create something truly unique. You will become part of history by taking part in this new way
+                    humans and computers collaborate by co-creating art in a way never before seen.
+                    Together we shall create haikus that will stand the test of time.`,
             user: [
                 {
                     question: 'How will we collaborate?',
@@ -230,6 +230,10 @@ export const speech = [
                 {
                     question: 'Who created this?',
                     redirectToAnswer: WHO_DUNNIT
+                },
+                {
+                    question: 'I have some more general questions.',
+                    redirectToAnswer: INITIAL_GREETING
                 },
             ]
         }
