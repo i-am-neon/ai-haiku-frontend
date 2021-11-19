@@ -23,3 +23,12 @@ a {
 .hidden {
   display: none;
 }
+
+.loadingTextContainer {
+  width: 100%;
+}
+
+#loadingText {
+  margin-top: 25vh;
+  text-align: center;
+}

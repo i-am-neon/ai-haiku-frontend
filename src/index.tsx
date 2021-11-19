@@ -29,16 +29,20 @@ declare global {
   }
 }
 
-ReactDOM.render(
-  <React.StrictMode>
-    <div style={{minHeight: '100vh', position: 'relative'}}>
-      <div style={{paddingBottom: '2.5rem'}}>
-        <App />
+setTimeout(() => {
+  ReactDOM.render(
+    <React.StrictMode>
+      <div style={{minHeight: '100vh', position: 'relative'}}>
+        <div style={{paddingBottom: '2.5rem'}}>
+          <App />
+        </div>
       </div>
-    </div>
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+    </React.StrictMode>,
+    document.getElementById('root')
+  );
+  
+}, 10);
+
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
