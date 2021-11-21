@@ -29,6 +29,10 @@ export default class App extends React.Component<AppProps, AppState> {
     }
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('load', this.handleLoad);
+  }
+
   handleLoad() {
     const loadingText = document.getElementById('loadingText');
     loadingText?.remove();

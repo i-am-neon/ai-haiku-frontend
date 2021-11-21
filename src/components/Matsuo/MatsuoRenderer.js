@@ -14,6 +14,11 @@ export default class Canvas extends React.Component {
 
     componentDidMount() {
         this.updateCanvas();
+        window.addEventListener('resize', this.updateCanvas);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateCanvas);
     }
 
     updateCanvas() {
@@ -25,8 +30,8 @@ export default class Canvas extends React.Component {
                 canvas: document.querySelector('canvas'),
                 antialias: true,
                 alpha: true
-            }),
-            size: { width: window.innerWidth * .9, height: window.innerHeight * .4}
+            }).setClearColor(0xffffff),
+            size: { width: window.innerWidth * .9, height: window.innerHeight * .4 }
         })
     }
 
@@ -42,7 +47,7 @@ export default class Canvas extends React.Component {
                     />
                 </Fade>
                 <Fade in={true}>
-                    <canvas className={this.props.showExampleHaiku ? 'hidden': ''} />
+                    <canvas className={this.props.showExampleHaiku ? 'hidden' : ''} />
                 </Fade>
             </>
         )
