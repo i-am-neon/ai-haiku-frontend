@@ -4,13 +4,10 @@ import * as THREE from 'three'
 import { render, events } from '@react-three/fiber'
 import Matsuo from './Matsuo'
 import exampleHaiku from '../../assets/exampleHaiku.png'
-import { height } from '@mui/system';
+
+const EXAMPLE_HAIKU_ALT_TEXT = `An example haiku. The background image is rough japanese paper. In the top right corner is Japanese characters. The center holds the text, "Shadows of Canyons, A flat road, a car... Sunset over Zion". The bottom left has black inky brush strokes.`
 
 export default class Canvas extends React.Component {
-
-    constructor(props) {
-        super(props);
-    }
 
     componentDidMount() {
         this.updateCanvas();
@@ -43,6 +40,7 @@ export default class Canvas extends React.Component {
                     <img
                         src={exampleHaiku}
                         style={{ height: '50vh' }}
+                        alt={EXAMPLE_HAIKU_ALT_TEXT}
                         className={this.props.showExampleHaiku ? '' : 'hidden'}
                     />
                 </Fade>

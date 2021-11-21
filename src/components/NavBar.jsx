@@ -2,14 +2,7 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import { ReactComponent as DiscordIcon } from '../assets/discord.svg';
-import { ReactComponent as TwitterIcon } from '../assets/twitter.svg';
-import logo from '../assets/logo.png';
-import logoRed from '../assets/logo-red.png';
 import logoRedTrimmed from '../assets/logo-red-trimmed.png';
-import { colors } from '../styles';
-import { height } from '@mui/system';
 
 export default function NavBar() {
   return (
@@ -25,12 +18,6 @@ export default function NavBar() {
               />
             </a>
           </Typography>
-          {/* <IconButton href='https://twitter.com/HashStacheNFTs' target='_blank' aria-label="Twitter" color={'inherit'}>
-            <TwitterIcon fill={colors.crimsonGlory} style={{ height: '4vh', maxHeight: '30px' }} />
-          </IconButton>
-          <IconButton href="https://discord.gg/QWH3MBkrQs" target='_blank' aria-label="Discord" color={'inherit'}>
-            <DiscordIcon fill={colors.crimsonGlory} style={{ height: '4vh', maxHeight: '30px' }} />
-          </IconButton> */}
         </Toolbar>
       </AppBar>
     </Box>

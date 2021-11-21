@@ -1,5 +1,5 @@
 import { OrbitControls, CameraShake } from '@react-three/drei'
-import { useControls } from 'leva'
+// import { useControls } from 'leva'
 import { Particles } from './Particles'
 
 export default function Matsuo() {

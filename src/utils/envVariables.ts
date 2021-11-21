@@ -1,5 +1,4 @@
 import dotenv from "dotenv";
-import { ethers } from "ethers";
 dotenv.config();
 
 

@@ -1,4 +1,4 @@
-import { DAI_CONTRACT, GREETER_CONTRACT } from '../constants'
+import { DAI_CONTRACT } from '../constants'
 
 export function getDaiContract(chainId: number, web3: any) {
   const dai = new web3.eth.Contract(

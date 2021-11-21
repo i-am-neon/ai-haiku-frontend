@@ -12,7 +12,6 @@ interface InteractionState {
     matsuosSpeechIndexToFade: number,
     userSpeech: any[],
     userSpeechIndexToFade: number,
-    previousInteraction: string | null,
     currentInteraction: string | null,
     interactionHistory: string[]
 }
@@ -25,7 +24,6 @@ class Interaction extends React.Component<InteractionProps, InteractionState> {
             matsuosSpeechIndexToFade: -1,
             userSpeech: [''],
             userSpeechIndexToFade: -1,
-            previousInteraction: null,
             currentInteraction: null,
             interactionHistory: []
         }
@@ -56,7 +54,6 @@ class Interaction extends React.Component<InteractionProps, InteractionState> {
         // Set state for previous interaction
         if (newSpeechName === INITIAL_GREETING) {
             this.setState({
-                previousInteraction: null,
                 currentInteraction: INITIAL_GREETING,
                 interactionHistory: [INITIAL_GREETING]
             });
@@ -64,14 +61,12 @@ class Interaction extends React.Component<InteractionProps, InteractionState> {
         } else if (newSpeechName !== this.state.interactionHistory[this.state.interactionHistory.length - 1]) {
             // User did not hit back, adding new interaction to history
             this.setState({
-                previousInteraction: this.state.currentInteraction,
                 currentInteraction: newSpeechName,
                 interactionHistory: [...this.state.interactionHistory, newSpeechName]
             });
         } else {
             // User went back
             this.setState({
-                previousInteraction: this.state.currentInteraction,
                 currentInteraction: newSpeechName,
             });
         }
@@ -139,7 +134,7 @@ class Interaction extends React.Component<InteractionProps, InteractionState> {
                 n = (
                     <>
                         <Fade in={this.state.userSpeechIndexToFade >= i} key={i}>
-                            <p><a href={redirectLink} target="_blank">
+                            <p><a href={redirectLink} target="_blank" rel="noreferrer">
                                 {userSpeechList[i].question} <OpenInNewIcon fontSize="small" />
                             </a></p>
                         </Fade>
