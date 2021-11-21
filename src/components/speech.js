@@ -18,7 +18,7 @@ const FAQ_WHAT_GET_WHEN_MINT_2 = 'whatGetWhenMint2';
 const MINT_DEETS = 'mintDeets';
 const WHO_DUNNIT = 'whoDunnit';
 
-const HAIKU_EXAMPLE_MATSUO_TEXT = `Behold: this is what your haiku may look like.
+const HAIKU_EXAMPLE_MATSUO_TEXT = `This is a haiku I recently created entitled, "The Milky Way".
                     The background will be one of four types of traditional handmade Japanese paper.
                     I will translate the haiku title you so gracefully provide into my mother tongue, Japanese. The title will go in the top right of the paper.
                     The center contains the haiku you choose of the three I create given the inspiration of your title.
@@ -75,12 +75,12 @@ export const speech = [
         data: {
             matsuo: `You're a curious one.
                     The flesh and blood Matsuo Bashō died on November 28th, 1694. We will honor Bashō by continuing the tradition of the haiku
-                    using new technological mediums. On November 28th, 2021, we will celebrate Bashō's life by forging a partnership
+                    using new technological mediums. On November 28th, 2021, we shall celebrate Bashō's life by forging a partnership
                     between AI and humans to create art known as "AI Haikus" stored immutably as NFTs.`,
             // matsuo: `The real Matsuo Bashō died on November 28th, 1694. He will come back to life as me...`,
             user: [
                 {
-                    question: 'Thank you.',
+                    question: 'I\'d like to ask some other questions',
                     redirectToAnswer: INITIAL_GREETING
                 },
             ]
@@ -89,10 +89,9 @@ export const speech = [
     {
         name: WHAT_IS_AI_HAIKU,
         data: {
-            matsuo: `AI Haiku is a creative experience where you will collaborate with me to author a haiku.
-                    Your humanity; pure emotion, creativity, and life will combine with the immense literary knowledge
-                    I hold to create something truly unique. You will become part of history by taking part in this new way
-                    humans and computers collaborate by co-creating art in a way never before seen.
+            matsuo: `AI Haiku is a creative experience where you will collaborate with me, an intelligent computing system, to author a haiku.
+                    Your humanity: pure emotion, creativity, and life will combine with the immense literary knowledge I hold to create something truly unique.
+                    You will have the opportunity to become part of a historical moment that redefines the way humans and computers collaborate.
                     Together we shall create haikus that will stand the test of time.`,
             user: [
                 {
@@ -109,7 +108,7 @@ export const speech = [
     {
         name: THE_TECH_AI,
         data: {
-            matsuo: `You are quite inquisitive. This trait will serve you well as you move forward in this world.
+            matsuo: `You are quite inquisitive. Such a trait will serve you well as you move forward in this world.
                     I am a program that utilizes OpenAI's GPT-3 language model.
                     GPT-3 was trained on hundreds of billions of parameters in a multi-million dollar research effort,
                     making me one of the most advanced language models in existence.`,
@@ -125,10 +124,9 @@ export const speech = [
         name: THE_TECH_BLOCKCHAIN,
         data: {
             matsuo: `This website interacts with a smart contract on the Ethereum blockchain to create NFTs.
-                    However, great care was taken to minimize gas prices for you. Because it is incredibly expensive to store
-                    data on Ethereum, Arweave is utilized to store both the image of your Haiku and the metadata of your NFT.
-                    Data stored an Arweave last forever, so you can rest assured that your Haiku will be available for
-                    decades if not centuries to come.`,
+                    However, great care was taken to minimize gas prices (thus, energy used by the network) for you.
+                    Because it is incredibly expensive and energy-intensive to store data on Ethereum, Arweave is utilized to store both the image of your Haiku and the metadata of your NFT.
+                    Data stored an Arweave lasts forever, so you can rest assured that your Haiku will be available for decades if not centuries to come.`,
             user: [
                 {
                     question: 'How will we collaborate?',
@@ -141,7 +139,7 @@ export const speech = [
         name: HOW_WE_COLLABORATE,
         data: {
             matsuo: `You will give me the subject of the haiku we will write. I, in turn, will present you with three haikus born from your idea.
-                    Then you will decide which one will live eternally on the blockchain as an NFT.
+                    Then you will decide which one will live eternally on the blockchain as your NFT.
                     I will rummage through my humble hut in the metaverse to find some parchment to write your haiku.
                     My office is full of rare and unique paper. Who knows which one my brush will land on?`,
             user: [
@@ -175,7 +173,7 @@ export const speech = [
                     There is no limit on the number of haikus you can mint, but you may only mint one at a time.`,
             user: [
                 {
-                    question: 'Thank you',
+                    question: 'I have some other questions to ask',
                     redirectToAnswer: INITIAL_GREETING
                 },
             ]
@@ -210,7 +208,7 @@ export const speech = [
         data: {
             matsuo: `I see you're new to this space. Welcome, I am truly excited for you to explore the world of programmable art.
                     An NFT stands for Non-Fungible Token. These tokens are essentially digital items that live in the blockchain.
-                    In this case, the token is a piece of art that’s been “minted” on the Ethereum blockchain that is one-of-a-kind and fully yours to own.
+                    In this case, the token is a one-of-a-kind piece of art that has been “minted” on Ethereum and is fully yours to own.
                     To get one, you'll need an Ethereum wallet like Metamask or Coinbase Wallet with some Ether,
                     the currency used on the Ethereum blockchain.`,
             user: [
@@ -243,7 +241,7 @@ export const speech = [
     {
         name: HOW_TO_MINT,
         data: {
-            matsuo: `On November 28th, 2021 at 0:00 JST (Japan Standard Time), visit this website and talk to me to begin the "minting" process.
+            matsuo: `On November 28th, 2021 at 9pm EST (11/29 at 2am UTC), visit this website and talk to me to begin the "minting" process.
                     To mint an NFT is to create the token that proves ownership of your haiku on the blockchain and adds this
                     token to your wallet. After that you'll be able to view your new NFT, sell it on OpenSea, and
                     even adorn the walls of your metaverse home with it!`,
@@ -251,6 +249,10 @@ export const speech = [
                 {
                     question: 'I\'d like to view my NFTs on OpenSea. \r',
                     redirectToAnswer: HOW_TO_WALLET
+                },
+                {
+                    question: 'Thanks for the information. Could I ask you something else?',
+                    redirectToAnswer: FAQ_MAIN
                 },
             ]
         }
@@ -297,10 +299,10 @@ export const speech = [
     {
         name: MINT_DEETS,
         data: {
-            matsuo: `On November 28th, 2021 at 0:00 JST (Japan Standard Time), visit this website and talk to me to begin the "minting" process.
+            matsuo: `On November 28th, 2021 at 9pm EST (11/29 at 2am UTC), visit this website and talk to me to begin the "minting" process.
                     Each haiku will cost 0.01 Ether (plus gas fees) to mint. There is no limit on the numberof haikus you can mint,
                     but you may only mint one at a time.`,
-            user: []
+            user: [{}]
         }
     },
     {
@@ -309,11 +311,7 @@ export const speech = [
             matsuo: `This project was authored by NΞ◎N.`,
             user: [
                 {
-                    question: 'I\'d like to see what NΞ◎N is up to on Twitter. \r',
-                },
-                {
-                    question: 'Thanks for the information. Could I ask you something else?',
-                    redirectToAnswer: FAQ_MAIN
+                    question: 'I\'d like to see what NΞ◎N is up to on Twitter \r',
                 },
             ]
         }
