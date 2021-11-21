@@ -6,35 +6,35 @@ import NavBar from './components/NavBar';
 import TermsAndConditions from './components/TermsAndConditions';
 import Paper from './components/Paper';
 import Footer from './components/Footer';
-import {isMobile} from 'react-device-detect';
+import { isMobile, isSafari } from 'react-device-detect';
 
 const Web3Connection = lazy(() => import('./web3/Web3Connection'));
 
 interface AppProps {
-  
+
 }
- 
+
 interface AppState {
-  
+
 }
- 
+
 export default class App extends React.Component<AppProps, AppState> {
-  
+
   componentDidMount() {
-    if (isMobile) {
+    if (isMobile || isSafari) {
       const loadingText = document.getElementById('loadingText');
-      loadingText?.remove();  
+      loadingText?.remove();
     } else {
       window.addEventListener('load', this.handleLoad);
-    }    
+    }
   }
 
   handleLoad() {
     const loadingText = document.getElementById('loadingText');
     loadingText?.remove();
-   }
-  
-  render() { 
+  }
+
+  render() {
     return (
       <div className="App">
         <BrowserRouter>
@@ -51,6 +51,6 @@ export default class App extends React.Component<AppProps, AppState> {
         </BrowserRouter>
       </div>
     );
-    }
+  }
 }
- 
+
