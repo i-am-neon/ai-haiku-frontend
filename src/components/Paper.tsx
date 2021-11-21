@@ -8,7 +8,7 @@ export default function Paper() {
                 Your AI Haiku NFT will live on both digital and physical paper.
                 The paper is represented digitally as a metadata property and resides
                 as the background of the image of your haiku. AI Haiku owners (called "Poets")
-                will have the privelage of receiving their haiku printed on handmade paper from
+                will have the privilege of receiving their haiku printed on handmade paper from
                 Japan; shipped anywhere in the world for free.
             </p>
             <p>

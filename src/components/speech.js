@@ -5,10 +5,8 @@ const WHO_ARE_YOU_2 = 'whoAreYou2';
 const WHAT_IS_AI_HAIKU = 'whatIsAiHaiku';
 const THE_TECH_AI = 'theTechAi';
 const THE_TECH_BLOCKCHAIN = 'theTechBlockchain';
-const HOW_WE_COLLABORATE_1 = 'howWeCollaborate1';
-const HOW_WE_COLLABORATE_2 = 'howWeCollaborate2';
-const HOW_WE_COLLABORATE_3 = 'howWeCollaborate3';
-const HOW_WE_COLLABORATE_4 = 'howWeCollaborate4';
+const HOW_WE_COLLABORATE = 'howWeCollaborate';
+const MINT_PRICE = 'mintPrice';
 export const HAIKU_EXAMPLE = 'haikuExample';
 const FAQ_MAIN = 'faqMain';
 const WUT_NFT = 'wutNft';
@@ -62,7 +60,7 @@ export const speech = [
         name: WHO_ARE_YOU_1,
         data: {
             matsuo: `I am an artificial intelligence entity created to emulate Matsuo Bashō, widely recognized as
-                    the greatest master of haiku ever to live. The dataset I was trained on includes but is not limited to Bashō's
+                    the greatest haiku poet ever to live. The dataset I was trained on includes but is not limited to Bashō's
                     life, second-hand accounts of his actions, and all known works.`,
             user: [
                 {
@@ -78,7 +76,7 @@ export const speech = [
             matsuo: `You're a curious one.
                     The flesh and blood Matsuo Bashō died on November 28th, 1694. We will honor Bashō by continuing the tradition of the haiku
                     using new technological mediums. On November 28th, 2021, we will celebrate Bashō's life by forging a partnership
-                    between AI and humans to create art own as "AI Haikus" stored immutably as NFTs.`,
+                    between AI and humans to create art known as "AI Haikus" stored immutably as NFTs.`,
             // matsuo: `The real Matsuo Bashō died on November 28th, 1694. He will come back to life as me...`,
             user: [
                 {
@@ -91,7 +89,7 @@ export const speech = [
     {
         name: WHAT_IS_AI_HAIKU,
         data: {
-            matsuo: `The AI Haiku is a creative experience where you will collaborate with me to author a haiku.
+            matsuo: `AI Haiku is a creative experience where you will collaborate with me to author a haiku.
                     Your humanity; pure emotion, creativity, and life will combine with the immense literary knowledge
                     I hold to create something truly unique. You will become part of history by taking part in this new way
                     humans and computers collaborate by co-creating art in a way never before seen.
@@ -99,10 +97,10 @@ export const speech = [
             user: [
                 {
                     question: 'How will we collaborate?',
-                    redirectToAnswer: HOW_WE_COLLABORATE_1
+                    redirectToAnswer: HOW_WE_COLLABORATE
                 },
                 {
-                    question: 'Tell me about the technology.',
+                    question: 'Tell me about the technology',
                     redirectToAnswer: THE_TECH_AI
                 },
             ]
@@ -134,36 +132,25 @@ export const speech = [
             user: [
                 {
                     question: 'How will we collaborate?',
-                    redirectToAnswer: HOW_WE_COLLABORATE_1
+                    redirectToAnswer: HOW_WE_COLLABORATE
                 },
             ]
         }
     },
     {
-        name: HOW_WE_COLLABORATE_1,
+        name: HOW_WE_COLLABORATE,
         data: {
             matsuo: `You will give me the subject of the haiku we will write. I, in turn, will present you with three haikus born from your idea.
-                    Then you will decide which one will live eternally on the blockchain as an NFT.`,
-            user: [
-                {
-                    question: 'Go on.',
-                    redirectToAnswer: HOW_WE_COLLABORATE_2
-                }
-            ]
-        }
-    },
-    {
-        name: HOW_WE_COLLABORATE_2,
-        data: {
-            matsuo: `I will rummage through my humble hut in the metaverse to find some parchment to write your haiku.
+                    Then you will decide which one will live eternally on the blockchain as an NFT.
+                    I will rummage through my humble hut in the metaverse to find some parchment to write your haiku.
                     My office is full of rare and unique paper. Who knows which one my brush will land on?`,
             user: [
                 {
                     question: 'What will go on this paper?',
-                    redirectToAnswer: HOW_WE_COLLABORATE_3
+                    redirectToAnswer: HAIKU_EXAMPLE
                 },
                 {
-                    question: 'Show me the different paper types. \r'
+                    question: 'Show me the different paper types \r'
                 },
             ]
         }
@@ -175,36 +162,20 @@ export const speech = [
             user: [
                 {
                     question: 'Surely your time is valuable. How much would such an item cost?',
-                    redirectToAnswer: HOW_WE_COLLABORATE_4
+                    redirectToAnswer: MINT_PRICE
                 },
             ]
         }
     },
-    // {
-    //     // NOTE: should this show the example??
-    //     name: HOW_WE_COLLABORATE_3,
-    //     data: {
-    //         matsuo: `I will translate the haiku title you so gracefully provided into my mother tongue, Japanese.
-    //                 The title will go in the top right of the paper. Next, I will write the content of your Haiku in the
-    //                 center of the page. Finally, I will use the title you have given me to generate a simple, yet unique
-    //                 combination of brush strokes on the parchment.`,
-    //         user: [
-    //             {
-    //                 question: 'Surely your time is valuable. How much would such an item cost?',
-    //                 redirectToAnswer: HOW_WE_COLLABORATE_4
-    //             },
-    //         ]
-    //     }
-    // },
     {
-        name: HOW_WE_COLLABORATE_4,
+        name: MINT_PRICE,
         data: {
             matsuo: `Oy! It is not polite to speak of such things. But I suppose you should know.
                     Each haiku will cost 0.01 Ether (plus gas fees) to mint. This price ensures accessibility to a large part the community.
                     There is no limit on the number of haikus you can mint, but you may only mint one at a time.`,
             user: [
                 {
-                    question: 'Thank you.',
+                    question: 'Thank you',
                     redirectToAnswer: INITIAL_GREETING
                 },
             ]
@@ -231,10 +202,6 @@ export const speech = [
                     question: 'Who created this?',
                     redirectToAnswer: WHO_DUNNIT
                 },
-                {
-                    question: 'I have some more general questions.',
-                    redirectToAnswer: INITIAL_GREETING
-                },
             ]
         }
     },
@@ -250,10 +217,6 @@ export const speech = [
                 {
                     question: 'How do I get one of these wallets?',
                     redirectToAnswer: HOW_TO_WALLET
-                },
-                {
-                    question: 'I\'d like to ask another question.',
-                    redirectToAnswer: FAQ_MAIN
                 },
             ]
         }
@@ -274,10 +237,6 @@ export const speech = [
                     question: 'What do I do after that?',
                     redirectToAnswer: HOW_TO_MINT
                 },
-                {
-                    question: 'I\'d like to ask another question.',
-                    redirectToAnswer: FAQ_MAIN
-                },
             ]
         }
     },
@@ -292,10 +251,6 @@ export const speech = [
                 {
                     question: 'I\'d like to view my NFTs on OpenSea. \r',
                     redirectToAnswer: HOW_TO_WALLET
-                },
-                {
-                    question: 'Thanks for the information. Could I ask you something else?',
-                    redirectToAnswer: FAQ_MAIN
                 },
             ]
         }
@@ -312,10 +267,6 @@ export const speech = [
                 {
                     question: 'Show me the different paper types. \r'
                 },
-                {
-                    question: 'Thanks for the information. Could I ask you something else?',
-                    redirectToAnswer: FAQ_MAIN
-                },
             ]
         }
     },
@@ -327,10 +278,6 @@ export const speech = [
                 {
                     question: 'Is this a purely digital form of art?',
                     redirectToAnswer: FAQ_WHAT_GET_WHEN_MINT_2
-                },
-                {
-                    question: 'Thanks for the information. Could I ask you something else?',
-                    redirectToAnswer: FAQ_MAIN
                 },
             ]
         }
@@ -353,12 +300,7 @@ export const speech = [
             matsuo: `On November 28th, 2021 at 0:00 JST (Japan Standard Time), visit this website and talk to me to begin the "minting" process.
                     Each haiku will cost 0.01 Ether (plus gas fees) to mint. There is no limit on the numberof haikus you can mint,
                     but you may only mint one at a time.`,
-            user: [
-                {
-                    question: 'Thanks for the information. Could I ask you something else?',
-                    redirectToAnswer: FAQ_MAIN
-                },
-            ]
+            user: []
         }
     },
     {

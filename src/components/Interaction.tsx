@@ -11,7 +11,10 @@ interface InteractionState {
     matsuosSpeech: string,
     matsuosSpeechIndexToFade: number,
     userSpeech: any[],
-    userSpeechIndexToFade: number
+    userSpeechIndexToFade: number,
+    previousInteraction: string | null,
+    currentInteraction: string | null,
+    interactionHistory: string[]
 }
 
 class Interaction extends React.Component<InteractionProps, InteractionState> {
@@ -21,7 +24,10 @@ class Interaction extends React.Component<InteractionProps, InteractionState> {
             matsuosSpeech: '',
             matsuosSpeechIndexToFade: -1,
             userSpeech: [''],
-            userSpeechIndexToFade: -1
+            userSpeechIndexToFade: -1,
+            previousInteraction: null,
+            currentInteraction: null,
+            interactionHistory: []
         }
     }
 
@@ -30,28 +36,54 @@ class Interaction extends React.Component<InteractionProps, InteractionState> {
         const initialGreeting = this.getSpeechByName(INITIAL_GREETING);
         this.setState({
             matsuosSpeech: initialGreeting.matsuo,
-            userSpeech: initialGreeting.user
+            userSpeech: initialGreeting.user,
+            currentInteraction: INITIAL_GREETING,
+            interactionHistory: [...this.state.interactionHistory, INITIAL_GREETING]
         });
         await this.fadeInCurrentSpeech();
     }
 
-    private getSpeechByName(name: string) {
-        let retSpeech = { matsuo: '', user: [{}] };
-        speech.forEach(obj => {
-            if (obj.name === name) {
-                retSpeech = obj.data;
-            }
-        });
-        return retSpeech;
+    async goToPreviousInteraction() {
+        const interactionHistoryCopy = this.state.interactionHistory;
+        interactionHistoryCopy.pop()
+        this.setState(
+            { interactionHistory: interactionHistoryCopy },
+            async() => await this.updateInteraction(this.state.interactionHistory[this.state.interactionHistory.length - 1])
+        );
     }
 
     async updateInteraction(newSpeechName: string) {
+        // Set state for previous interaction
+        if (newSpeechName === INITIAL_GREETING) {
+            this.setState({
+                previousInteraction: null,
+                currentInteraction: INITIAL_GREETING,
+                interactionHistory: [INITIAL_GREETING]
+            });
+        // Else if user did not just go back
+        } else if (newSpeechName !== this.state.interactionHistory[this.state.interactionHistory.length - 1]) {
+            // User did not hit back, adding new interaction to history
+            this.setState({
+                previousInteraction: this.state.currentInteraction,
+                currentInteraction: newSpeechName,
+                interactionHistory: [...this.state.interactionHistory, newSpeechName]
+            });
+        } else {
+            // User went back
+            this.setState({
+                previousInteraction: this.state.currentInteraction,
+                currentInteraction: newSpeechName,
+            });
+        }
 
+        // Set setShowExampleHaiku
         if (newSpeechName === HAIKU_EXAMPLE || newSpeechName === FAQ_HAIKU_EXAMPLE) {
             this.props.setShowExampleHaiku(true);
         } else {
             this.props.setShowExampleHaiku(false);
         }
+
+        // Fade in new speech for interaction
         const newSpeech = this.getSpeechByName(newSpeechName);
         this.setState({
             matsuosSpeechIndexToFade: -1,
@@ -125,6 +157,19 @@ class Interaction extends React.Component<InteractionProps, InteractionState> {
                 )
             }
             ret.push(n);
+            // Add back button at the end when not on initial interaction
+            if (i === userSpeechList.length - 1 && this.state.currentInteraction !== INITIAL_GREETING) {
+                const backButton = (
+                    <>
+                        <Fade in={this.state.userSpeechIndexToFade >= i + 1} key={i + 1}>
+                            <p><a onClick={async () => await this.goToPreviousInteraction()}>
+                                <i>Go back</i>
+                            </a></p>
+                        </Fade>
+                    </>
+                )
+                ret.push(backButton)
+            }
         }
         return ret;
     }
@@ -139,8 +184,8 @@ class Interaction extends React.Component<InteractionProps, InteractionState> {
             this.setState({ matsuosSpeechIndexToFade: index });
         }
         await this.sleep(500);
-        // Fade in user's questions
-        for (let index = 0; index < this.state.userSpeech.length; index++) {
+        // Fade in user's questions, + 1 for the back button.
+        for (let index = 0; index <= this.state.userSpeech.length; index++) {
             await this.sleep(500);
             this.setState({ userSpeechIndexToFade: index });
         }
@@ -157,6 +202,16 @@ class Interaction extends React.Component<InteractionProps, InteractionState> {
                 {this.buildUserSpeech(this.state.userSpeech)}
             </>
         );
+    }
+
+    private getSpeechByName(name: string) {
+        let retSpeech = { matsuo: '', user: [{}] };
+        speech.forEach(obj => {
+            if (obj.name === name) {
+                retSpeech = obj.data;
+            }
+        });
+        return retSpeech;
     }
 }
 

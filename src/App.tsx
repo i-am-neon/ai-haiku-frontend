@@ -24,7 +24,6 @@ export default class App extends React.Component<AppProps, AppState> {
   }
 
   handleLoad() {
-    console.log('LOADED!');
     const loadingText = document.getElementById('loadingText');
     loadingText?.remove();
    }
