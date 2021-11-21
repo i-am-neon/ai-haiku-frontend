@@ -6,6 +6,7 @@ import NavBar from './components/NavBar';
 import TermsAndConditions from './components/TermsAndConditions';
 import Paper from './components/Paper';
 import Footer from './components/Footer';
+import {isMobile} from 'react-device-detect';
 
 const Web3Connection = lazy(() => import('./web3/Web3Connection'));
 
@@ -20,7 +21,12 @@ interface AppState {
 export default class App extends React.Component<AppProps, AppState> {
   
   componentDidMount() {
-    window.addEventListener('load', this.handleLoad);
+    if (isMobile) {
+      const loadingText = document.getElementById('loadingText');
+      loadingText?.remove();  
+    } else {
+      window.addEventListener('load', this.handleLoad);
+    }    
   }
 
   handleLoad() {
@@ -33,7 +39,7 @@ export default class App extends React.Component<AppProps, AppState> {
       <div className="App">
         <BrowserRouter>
           <NavBar />
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<></>}>
             <Switch>
               <Route path='/mint' component={Web3Connection}></Route>
               <Route path='/terms' component={TermsAndConditions}></Route>
