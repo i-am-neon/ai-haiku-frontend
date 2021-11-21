@@ -35,13 +35,13 @@ export class ShunsuCarousel extends Component {
                     emulateTouch={false}
                 >
                     <div>
-                        <img src={shunsu_0} />
+                        <img src={shunsu_0} alt='Shunsu paper' />
                     </div>
                     <div>
-                        <img src={shunsu_1} />
+                        <img src={shunsu_1} alt='Shunsu paper' />
                     </div>
                     <div>
-                        <img src={shunsu_2} />
+                        <img src={shunsu_2} alt='Shunsu paper' />
                     </div>
                 </Carousel>
             </div>
@@ -63,13 +63,13 @@ export class OguraCarousel extends Component {
                     emulateTouch={false}
                 >
                     <div>
-                        <img src={ogura_0} />
+                        <img src={ogura_0} alt='Ogura paper' />
                     </div>
                     <div>
-                        <img src={ogura_1} />
+                        <img src={ogura_1} alt='Ogura paper' />
                     </div>
                     <div>
-                        <img src={ogura_2} />
+                        <img src={ogura_2} alt='Ogura paper' />
                     </div>
                 </Carousel>
             </div>
@@ -91,13 +91,13 @@ export class UnryuCarousel extends Component {
                     emulateTouch={false}
                 >
                     <div>
-                        <img src={unryu_0} />
+                        <img src={unryu_0} alt='Unryu paper' />
                     </div>
                     <div>
-                        <img src={unryu_1} />
+                        <img src={unryu_1} alt='Unryu paper' />
                     </div>
                     <div>
-                        <img src={unryu_2} />
+                        <img src={unryu_2} alt='Unryu paper' />
                     </div>
                 </Carousel>
             </div>
@@ -119,10 +119,10 @@ export class GoldAndSilverCarousel extends Component {
                     emulateTouch={false}
                 >
                     <div>
-                        <img src={gold_silver_0} />
+                        <img src={gold_silver_0} alt='gold and silver paper' />
                     </div>
                     <div>
-                        <img src={gold_silver_1} />
+                        <img src={gold_silver_1} alt='gold and silver paper' />
                     </div>
                 </Carousel>
             </div>
