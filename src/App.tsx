@@ -6,7 +6,7 @@ import NavBar from './components/NavBar';
 import TermsAndConditions from './components/TermsAndConditions';
 import Paper from './components/Paper';
 import Footer from './components/Footer';
-import { isMobile, isSafari } from 'react-device-detect';
+import { isMobile, isSafari, isFirefox } from 'react-device-detect';
 
 const Web3Connection = lazy(() => import('./web3/Web3Connection'));
 
@@ -21,7 +21,7 @@ interface AppState {
 export default class App extends React.Component<AppProps, AppState> {
 
   componentDidMount() {
-    if (isMobile || isSafari) {
+    if (isMobile || isSafari || isFirefox) {
       const loadingText = document.getElementById('loadingText');
       loadingText?.remove();
     } else {
