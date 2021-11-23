@@ -152,14 +152,22 @@ class Interaction extends React.Component<InteractionProps, InteractionState> {
                     </>
                 )
             }
-            ret.push(n);
+
+            // Don't show mint conversation if not ready to mint
+            const initialSpeechMintOption = 'I\'m ready to mint my AI Haiku';
+            if (
+                !userSpeechList[i]?.question?.includes(initialSpeechMintOption) ||
+                (IS_MINT_READY && userSpeechList[i]?.question?.includes(initialSpeechMintOption))) {
+                ret.push(n);
+            }
+            
 
             if (IS_MINT_READY && userSpeechList[i]?.question?.includes('\t')) {
                 const mintLink = (
                     <>
                         <Fade in={this.state.userSpeechIndexToFade >= i + 1} key={i + 1}>
                             <p><a href='/mint'>
-                                No thank you, I'm ready to mint now
+                                No need to explain, I'm ready to mint now
                             </a></p>
                         </Fade>
                     </>
@@ -180,6 +188,7 @@ class Interaction extends React.Component<InteractionProps, InteractionState> {
                 ret.push(backButton)
             }
         }
+       
         return ret;
     }
 
