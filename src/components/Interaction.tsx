@@ -2,6 +2,7 @@ import * as React from 'react';
 import Fade from '@mui/material/Fade';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { FAQ_HAIKU_EXAMPLE, HAIKU_EXAMPLE, INITIAL_GREETING, speech } from './speech';
+import { IS_MINT_READY } from '../utils/envVariables';
 
 interface InteractionProps {
     setShowExampleHaiku: any
@@ -46,7 +47,7 @@ class Interaction extends React.Component<InteractionProps, InteractionState> {
         interactionHistoryCopy.pop()
         this.setState(
             { interactionHistory: interactionHistoryCopy },
-            async() => await this.updateInteraction(this.state.interactionHistory[this.state.interactionHistory.length - 1])
+            async () => await this.updateInteraction(this.state.interactionHistory[this.state.interactionHistory.length - 1])
         );
     }
 
@@ -57,7 +58,7 @@ class Interaction extends React.Component<InteractionProps, InteractionState> {
                 currentInteraction: INITIAL_GREETING,
                 interactionHistory: [INITIAL_GREETING]
             });
-        // Else if user did not just go back
+            // Else if user did not just go back
         } else if (newSpeechName !== this.state.interactionHistory[this.state.interactionHistory.length - 1]) {
             // User did not hit back, adding new interaction to history
             this.setState({
@@ -152,6 +153,19 @@ class Interaction extends React.Component<InteractionProps, InteractionState> {
                 )
             }
             ret.push(n);
+
+            if (IS_MINT_READY && userSpeechList[i]?.question?.includes('\t')) {
+                const mintLink = (
+                    <>
+                        <Fade in={this.state.userSpeechIndexToFade >= i + 1} key={i + 1}>
+                            <p><a href='/mint'>
+                                No thank you, I'm ready to mint now
+                            </a></p>
+                        </Fade>
+                    </>
+                );
+                ret.push(mintLink)
+            }
             // Add back button at the end when not on initial interaction
             if (i === userSpeechList.length - 1 && this.state.currentInteraction !== INITIAL_GREETING) {
                 const backButton = (

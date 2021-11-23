@@ -33,13 +33,13 @@ import {
   formatTestTransaction,
   getChainData
 } from "./helpers/utilities";
-import { IAssetData, IBoxProfile } from "./helpers/types";
+import { IAssetData, IBoxProfile, MintStage } from "./helpers/types";
 import { fonts } from "../styles";
 import { openBox, getProfile } from "./helpers/box";
 import {
   ETH_SEND_TRANSACTION,
   ETH_SIGN,
-  PERSONAL_SIGN,
+  PERSONAL_SIGN as SIGN_AUTH,
   BOX_GET_PROFILE,
   DAI_BALANCE_OF,
   DAI_TRANSFER,
@@ -50,6 +50,32 @@ import contractAddress from '../contracts/contract-address.json';
 import AiHaikuContractArtifact from '../contracts/AIHaiku.json';
 import { callBalanceOf, callTransfer } from "./helpers/web3";
 import { GENERATOR_URL_BASE, NODE_ENV } from "../utils/envVariables";
+
+import { Fade } from "@mui/material";
+import TextField from '@mui/material/TextField';
+
+const TitleTextField = styled(TextField)({
+  '& input:valid + fieldset': {
+    borderColor: 'black',
+    borderWidth: 2,
+  },
+  '& input:invalid + fieldset': {
+    borderColor: 'red',
+    borderWidth: 2,
+  },
+  '& input:valid:focus + fieldset': {
+    borderColor: 'black',
+    borderLeftWidth: 6,
+    padding: '4px !important', // override inline-style
+  },
+  '& label': {
+    fontFamily: fonts.family.ShipporiMincho
+  },
+  '& label.Mui-focused': {
+    color: 'black',
+  },
+});
+
 
 const SLayout = styled.div`
   position: relative;
@@ -103,20 +129,40 @@ const SBalances = styled(SLanding)`
 `;
 
 const STestButtonContainer = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
+position: relative;
+width: 100%;
+height: auto;
+max-width: 224px;
+padding: 12px;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: flex-start;
 `;
 
 const STestButton = styled(Button)`
-  border-radius: 8px;
-  font-size: ${fonts.size.medium};
-  height: 44px;
-  width: 100%;
-  max-width: 175px;
-  margin: 12px;
+transition: all 0.15s ease-in-out;
+position: relative;
+line-height: 1em;
+background-image: none;
+outline: none;
+overflow: hidden;
+box-shadow: none;
+border: none;
+border-style: none;
+box-sizing: border-box;
+background-color: rgb(255, 0, 0);
+border: none;
+color: rgb(255, 255, 255);
+box-shadow: 0 4px 6px 0 rgba(50, 50, 93, 0.11),
+  0 1px 3px 0 rgba(0, 0, 0, 0.08), inset 0 0 1px 0 rgba(0, 0, 0, 0.06);
+border-radius: 32px;
+font-family: 'Shippori Mincho B1', serif;
+font-size: 16px;
+font-weight: 600;
+height: 48px;
+width: 100%;
+margin: 0 auto;
 `;
 
 interface IAppState {
@@ -132,10 +178,14 @@ interface IAppState {
   showModal: boolean;
   pendingRequest: boolean;
   mintPriceInWei: BigNumber | null;
-  mintPriceDisplay: string | null;
+  mintPrice: string | null;
+  numberMinted: number | null;
+  maxSupply: number | null;
   result: any | null;
   lastTxn: string | null;
   imageUrl: string | null;
+  currentStage: MintStage;
+  haikuTitleHasError: boolean;
 }
 
 const INITIAL_STATE: IAppState = {
@@ -151,10 +201,14 @@ const INITIAL_STATE: IAppState = {
   showModal: false,
   pendingRequest: false,
   mintPriceInWei: null,
-  mintPriceDisplay: null,
+  mintPrice: null,
+  numberMinted: null,
+  maxSupply: null,
   result: null,
   lastTxn: null,
-  imageUrl: null
+  imageUrl: null,
+  currentStage: MintStage.AUTH_MESSAGE,
+  haikuTitleHasError: false
 };
 
 function initWeb3(provider: any) {
@@ -225,10 +279,13 @@ class Web3Connection extends React.Component<any, any> {
       _provider.getSigner(0)
     );
 
-    console.log('myNftContract :>> ', contract);
+    console.log('Contract :>> ', contract);
 
     const mintPriceInWei = await contract.PRICE();
-    const mintPriceDisplay = ethers.utils.formatEther(mintPriceInWei) + ' Ξ'
+    const mintPrice = ethers.utils.formatEther(mintPriceInWei) + ' Ξ'
+
+    const numberMinted = await contract.totalSupply().then((bigNum: BigNumber) => bigNum.toNumber());
+    const maxSupply = await contract.MAX_SUPPLY().then((bigNum: BigNumber) => bigNum.toNumber());
 
     await this.setState({
       web3,
@@ -239,7 +296,9 @@ class Web3Connection extends React.Component<any, any> {
       networkId,
       contract,
       mintPriceInWei,
-      mintPriceDisplay
+      mintPrice,
+      numberMinted,
+      maxSupply
     });
     await this.getAccountAssets();
   };
@@ -416,7 +475,7 @@ class Web3Connection extends React.Component<any, any> {
     }
   };
 
-  public testSignPersonalMessage = async () => {
+  public signAuthMessage = async () => {
     const { web3, address } = this.state;
 
     if (!web3) {
@@ -452,7 +511,7 @@ class Web3Connection extends React.Component<any, any> {
 
       // format displayed result
       const formattedResult = {
-        action: PERSONAL_SIGN,
+        action: SIGN_AUTH,
         address,
         signer,
         verified,
@@ -463,13 +522,19 @@ class Web3Connection extends React.Component<any, any> {
       this.setState({
         web3,
         pendingRequest: false,
-        result: formattedResult || null
+        showModal: false,
+        // result: formattedResult || null,
+        currentStage: MintStage.PICK_TITLE
       });
     } catch (error) {
       console.error(error); // tslint:disable-line
       this.setState({ web3, pendingRequest: false, result: null });
     }
   };
+
+  public onSubmitHaikuTitle = async () => {
+    this.setState({ haikuTitleHasError: true });
+  }
 
   public saveImageToArweave = async () => {
     const { web3, contract, mintPriceInWei } = this.state;
@@ -501,7 +566,7 @@ class Web3Connection extends React.Component<any, any> {
       // IMPLEMENT THE BELOW in the loading modal, remove rinkeby for production
       console.log('REMOVE rinkeby in the below text for production');
       console.log('view status on: https://rinkeby.etherscan.io/tx/' + mintTx.hash);
-      
+
 
       await mintTx.wait().then((res: any) => {
         console.log('mint successful!');
@@ -693,6 +758,11 @@ class Web3Connection extends React.Component<any, any> {
       address,
       connected,
       chainId,
+      mintPrice,
+      numberMinted,
+      maxSupply,
+      haikuTitleHasError,
+      currentStage,
       fetching,
       showModal,
       pendingRequest,
@@ -705,6 +775,9 @@ class Web3Connection extends React.Component<any, any> {
             connected={connected}
             address={address}
             chainId={chainId}
+            mintPrice={mintPrice}
+            numberMinted={numberMinted}
+            maxSupply={maxSupply}
             killSession={this.resetApp}
           />
           <SContent>
@@ -716,54 +789,76 @@ class Web3Connection extends React.Component<any, any> {
               </Column>
             ) : !!assets && !!assets.length ? (
               <SBalances>
-                <h3>Actions</h3>
-                <Column center>
-                  <STestButtonContainer>
-                    {/* <STestButton left onClick={this.testSendTransaction}>
-                      {ETH_SEND_TRANSACTION}
-                    </STestButton>
+                <h3>Mint</h3>
 
-                    <STestButton left onClick={this.testSignMessage}>
-                      {ETH_SIGN}
-                    </STestButton> */}
+                {currentStage === MintStage.AUTH_MESSAGE ? (
+                  <Fade in={true}>
+                    <span>
+                      <Column center>
+                        <p>Please log in with your wallet:</p>
+                        <STestButtonContainer>
+                          <STestButton onClick={this.signAuthMessage}>
+                            {SIGN_AUTH}
+                          </STestButton>
+                        </STestButtonContainer>
+                      </Column>
+                    </span>
+                  </Fade>
+                ) : <></>}
 
-                    <STestButton left onClick={this.testSignPersonalMessage}>
-                      {PERSONAL_SIGN}
-                    </STestButton>
+                {currentStage === MintStage.PICK_TITLE ? (
+                  <Fade in={true}>
+                    <span>
+                      <Column center>
+                        <p>
+                          What would you like to title your haiku?
+                          <br />
+                          <i>(15 character limit)</i>
+                        </p>
 
-                    <STestButton left onClick={this.saveImageToArweave}>
-                      {MINT_NFT}
-                    </STestButton>
+                        <TitleTextField
+                          label="Haiku title"
+                          autoComplete="false"
+                          error={haikuTitleHasError}
+                        // hintText="Password"
+                        // floatingLabelText="Password"
+                        // type="password"
+                        // errorText={this.state.password_error_text}
+                        // onChange={e => this.changeValue(e, 'password')}
+                        // onBlur={this.isDisabled}
+                        />
+                        {haikuTitleHasError ? 
+                          (<Fade in={true}>
+                            <p style={{color: 'red'}}>ERROR</p>
+                          </Fade>)
+                        : <></>}
+                        <STestButtonContainer>
+                          <STestButton onClick={this.onSubmitHaikuTitle}>
+                            Submit
+                          </STestButton>
+                        </STestButtonContainer>
+                      </Column>
+                    </span>
+                  </Fade>
+                ) : <></>}
 
-                    <STestButton left onClick={this.getStatusFromLastTxn}>
+                {currentStage === MintStage.MINT ? (
+                  <Column center>
+                    <p>Please click this button to log in with your wallet:</p>
+                    <STestButtonContainer>
+                      <STestButton onClick={this.saveImageToArweave}>
+                        {MINT_NFT}
+                      </STestButton>
+                    </STestButtonContainer>
+                  </Column>
+                ) : <></>}
+
+
+                {/* <STestButton onClick={this.getStatusFromLastTxn}>
                       {GET_STATUS_FROM_TXN}
-                    </STestButton>
-
-                    <br /><br />
-
-                    <p>Mint Price: {this.state.mintPriceDisplay}</p>
-
-                    {/* <STestButton
-                      left
-                      onClick={() => this.testContractCall(DAI_BALANCE_OF)}
-                    >
-                      {DAI_BALANCE_OF}
-                    </STestButton>
-
-                    <STestButton
-                      left
-                      onClick={() => this.testContractCall(DAI_TRANSFER)}
-                    >
-                      {DAI_TRANSFER}
-                    </STestButton>
-
-                    <STestButton left onClick={this.testOpenBox}>
-                      {BOX_GET_PROFILE}
                     </STestButton> */}
-                  </STestButtonContainer>
-                </Column>
-                <h3>Balances</h3>
-                <AccountAssets chainId={chainId} assets={assets} />{" "}
+                {/* <h3>Balances</h3>
+                <AccountAssets chainId={chainId} assets={assets} />{" "} */}
               </SBalances>
             ) : (
               <SLanding center>

@@ -1,3 +1,9 @@
+export enum MintStage {
+  AUTH_MESSAGE,
+  PICK_TITLE,
+  MINT
+}
+
 export interface IAssetData {
   symbol: string;
   name: string;

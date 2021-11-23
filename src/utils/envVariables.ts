@@ -11,3 +11,8 @@ if (!process.env["REACT_APP_GENERATOR_URL_BASE"]) {
     throw new Error("No generator base URL. Set REACT_APP_GENERATOR_URL_BASE environment variable.");
 }
 export const GENERATOR_URL_BASE = process.env["REACT_APP_GENERATOR_URL_BASE"];
+
+if (!process.env["REACT_APP_IS_MINT_READY"]) {
+    throw new Error("No REACT_APP_IS_MINT_READY environment variable.");
+}
+export const IS_MINT_READY = process.env["REACT_APP_IS_MINT_READY"] === "true";

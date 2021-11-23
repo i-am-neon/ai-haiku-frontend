@@ -17,6 +17,8 @@ const FAQ_WHAT_GET_WHEN_MINT_1 = 'whatGetWhenMint1';
 const FAQ_WHAT_GET_WHEN_MINT_2 = 'whatGetWhenMint2';
 const MINT_DEETS = 'mintDeets';
 const WHO_DUNNIT = 'whoDunnit';
+const READY_TO_MINT = 'readyToMint';
+const EXPLAIN_MINT = 'explainMint';
 
 const HAIKU_EXAMPLE_MATSUO_TEXT = `This is a haiku I recently created entitled, "The Milky Way".
                     The background will be one of four types of traditional handmade Japanese paper.
@@ -50,8 +52,12 @@ export const speech = [
                     redirectToAnswer: WHAT_IS_AI_HAIKU
                 },
                 {
-                    question: 'I\'ve got some specific questions.',
+                    question: 'I\'ve got some specific questions',
                     redirectToAnswer: FAQ_MAIN
+                },
+                {
+                    question: 'I\'m ready to mint my AI Haiku',
+                    redirectToAnswer: READY_TO_MINT
                 },
             ]
         }
@@ -314,6 +320,28 @@ export const speech = [
                 {
                     question: 'I\'d like to see what NΞ◎N is up to on Twitter \r',
                 },
+            ]
+        }
+    },
+    {
+        name: READY_TO_MINT,
+        data: {
+            matsuo: `I see you're ready to create your haiku.
+                    Would you like me to explain how this process will work?`,
+            user: [
+                {
+                    question: 'Yes, tell me \t', // \t is code for: mint link after this line
+                    redirectToAnswer: EXPLAIN_MINT
+                },
+            ]
+        }
+    },
+    {
+        name: EXPLAIN_MINT,
+        data: {
+            matsuo: `BLAH`,
+            user: [
+                {},
             ]
         }
     },

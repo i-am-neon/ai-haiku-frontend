@@ -56,12 +56,13 @@ const SConnectButton = styled.button<IConnectButtonStyleProps>`
   border: none;
   border-style: none;
   box-sizing: border-box;
-  background-color: rgb(64, 153, 255);
+  background-color: rgb(255, 0, 0);
   border: none;
   color: rgb(255, 255, 255);
   box-shadow: 0 4px 6px 0 rgba(50, 50, 93, 0.11),
     0 1px 3px 0 rgba(0, 0, 0, 0.08), inset 0 0 1px 0 rgba(0, 0, 0, 0.06);
   border-radius: 32px;
+  font-family: 'Shippori Mincho B1', serif;
   font-size: 16px;
   font-weight: 600;
   height: 48px;
@@ -124,7 +125,7 @@ const ConnectButton = (props: IConnectButtonProps) => (
     >
       <SHoverLayer />
       <SIcon />
-      {"Connect"}
+      {"Connect Wallet"}
     </SConnectButton>
   </SConnectButtonContainer>
 );

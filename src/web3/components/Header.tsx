@@ -77,18 +77,31 @@ interface IHeaderProps {
   connected: boolean;
   address: string;
   chainId: number;
+  mintPrice: string | null;
+  numberMinted: number | null;
+  maxSupply: number | null;
 }
 
 const Header = (props: IHeaderProps) => {
-  const { connected, address, chainId, killSession } = props;
+  const { connected, address, chainId, mintPrice, numberMinted, maxSupply, killSession } = props;
   const chainData = chainId ? getChainData(chainId) : null;
   return (
     <SHeader {...props}>
       {connected && chainData ? (
-        <SActiveChain>
-          <p>{`Connected to`}</p>
-          <p>{chainData.name}</p>
-        </SActiveChain>
+        <>
+          {/* <SActiveChain>
+            <p>{`Connected to`}</p>
+            <p>{chainData.name}</p>
+          </SActiveChain> */}
+          <SActiveChain>
+            <p>{`Mint price`}</p>
+            <p>{mintPrice}</p>
+          </SActiveChain>
+          <SActiveChain>
+            <p>{`Total minted`}</p>
+            <p>{numberMinted} / {maxSupply}</p>
+          </SActiveChain>
+        </>
       ) : (
         <Banner />
       )}
