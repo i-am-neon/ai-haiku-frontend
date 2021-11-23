@@ -51,8 +51,9 @@ import AiHaikuContractArtifact from '../contracts/AIHaiku.json';
 import { callBalanceOf, callTransfer } from "./helpers/web3";
 import { GENERATOR_URL_BASE, NODE_ENV } from "../utils/envVariables";
 
-import { Fade } from "@mui/material";
+import { Card, CardActionArea, CardContent, Fade } from "@mui/material";
 import TextField from '@mui/material/TextField';
+import { stylizeHaikuOption } from "./helpers/tsxUtilities";
 
 const TitleTextField = styled(TextField)({
   '& input:valid + fieldset': {
@@ -186,6 +187,7 @@ interface IAppState {
   imageUrl: string | null;
   currentStage: MintStage;
   haikuTitleHasError: boolean;
+  haikuOptions: string[];
 }
 
 const INITIAL_STATE: IAppState = {
@@ -208,7 +210,8 @@ const INITIAL_STATE: IAppState = {
   lastTxn: null,
   imageUrl: null,
   currentStage: MintStage.AUTH_MESSAGE,
-  haikuTitleHasError: false
+  haikuTitleHasError: false,
+  haikuOptions: []
 };
 
 function initWeb3(provider: any) {
@@ -532,8 +535,47 @@ class Web3Connection extends React.Component<any, any> {
     }
   };
 
+  public chooseHaiku = async (index: number) => {
+    console.log(`this.state.haikuOptions[index]`, this.state.haikuOptions[index]);
+  }
+
   public onSubmitHaikuTitle = async () => {
-    this.setState({ haikuTitleHasError: true });
+    const { web3, address } = this.state;
+
+    if (!web3) {
+      return;
+    }
+
+    if (false) {
+      this.setState({ haikuTitleHasError: true });
+    }
+    try {
+
+      // open modal
+      this.toggleModal();
+
+      // toggle pending request indicator
+      this.setState({ pendingRequest: true });
+
+      const haikuOptions = await axios.put(GENERATOR_URL_BASE + 'haiku', {
+        data: 'Hello from React! ✌🏻'
+      }).then(res => res.data.haikus)
+        .catch(err => console.error('error occurred while saving to Arweave.'));
+
+      console.log(`result`, haikuOptions)
+
+      this.setState({
+        web3,
+        pendingRequest: false,
+        showModal: false,
+        haikuOptions,
+        currentStage: MintStage.PICK_HAIKU
+      });
+    } catch (error) {
+      console.error(error); // tslint:disable-line
+      this.setState({ web3, pendingRequest: false, result: null });
+    }
+
   }
 
   public saveImageToArweave = async () => {
@@ -827,17 +869,61 @@ class Web3Connection extends React.Component<any, any> {
                         // onChange={e => this.changeValue(e, 'password')}
                         // onBlur={this.isDisabled}
                         />
-                        {haikuTitleHasError ? 
+                        {haikuTitleHasError ?
                           (<Fade in={true}>
-                            <p style={{color: 'red'}}>ERROR</p>
+                            <p style={{ color: 'red' }}>ERROR</p>
                           </Fade>)
-                        : <></>}
+                          : <></>}
                         <STestButtonContainer>
                           <STestButton onClick={this.onSubmitHaikuTitle}>
                             Submit
                           </STestButton>
                         </STestButtonContainer>
                       </Column>
+                    </span>
+                  </Fade>
+                ) : <></>}
+
+                {currentStage === MintStage.PICK_HAIKU ? (
+                  <Fade in={true}>
+                    <span>
+                      <Column center>
+                        <p>
+                          Which haiku speaks to your soul?
+                        </p>
+
+                        <Card sx={{ mx: 'auto', width: '33vw', marginBottom: '2.5rem', marginTop: '1rem' }}>
+                          <span onClick={() => this.chooseHaiku(0)}>
+                            <CardActionArea>
+                              <CardContent>
+                                {stylizeHaikuOption(this.state.haikuOptions[0])}
+                              </CardContent>
+                            </CardActionArea>
+                          </span>
+                        </Card>
+
+                        <Card sx={{ mx: 'auto', width: '33vw', marginBottom: '2.5rem' }}>
+                          <span onClick={() => this.chooseHaiku(1)}>
+                            <CardActionArea>
+                              <CardContent>
+                                {stylizeHaikuOption(this.state.haikuOptions[1])}
+                              </CardContent>
+                            </CardActionArea>
+                          </span>
+                        </Card>
+
+                        <Card sx={{ mx: 'auto', width: '33vw', marginBottom: '2.5rem' }}>
+                          <span onClick={() => this.chooseHaiku(2)}>
+                            <CardActionArea>
+                              <CardContent>
+                                {stylizeHaikuOption(this.state.haikuOptions[2])}
+                              </CardContent>
+                            </CardActionArea>
+                          </span>
+                        </Card>
+
+                      </Column>
+
                     </span>
                   </Fade>
                 ) : <></>}

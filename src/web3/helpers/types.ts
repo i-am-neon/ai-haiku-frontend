@@ -1,6 +1,7 @@
 export enum MintStage {
   AUTH_MESSAGE,
   PICK_TITLE,
+  PICK_HAIKU,
   MINT
 }
 

@@ -32,3 +32,8 @@ a, Link {
   margin-top: 25vh;
   text-align: center;
 }
+
+.haikuOption {
+  font-family: 'Shippori Mincho B1', serif;
+  font-size: large;
+}
