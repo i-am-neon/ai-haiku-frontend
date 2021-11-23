@@ -55,10 +55,10 @@ export const speech = [
                     question: 'I\'ve got some specific questions',
                     redirectToAnswer: FAQ_MAIN
                 },
-                {
-                    question: 'I\'m ready to mint my AI Haiku',
-                    redirectToAnswer: READY_TO_MINT
-                },
+                // {
+                //     question: 'I\'m ready to mint my AI Haiku',
+                //     redirectToAnswer: READY_TO_MINT
+                // },
             ]
         }
     },
