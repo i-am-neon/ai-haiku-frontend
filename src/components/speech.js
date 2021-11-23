@@ -170,7 +170,8 @@ export const speech = [
         data: {
             matsuo: `Oy! It is not polite to speak of such things. But I suppose you should know.
                     Each haiku will cost 0.01 Ether (plus gas fees) to mint. This price ensures accessibility to a large part the community.
-                    There is no limit on the number of haikus you can mint, but you may only mint one at a time.`,
+                    There is no limit on the number of haikus you can mint, but you may only mint one at a time.
+                    There will only be 575 AI Haikus ever created.`,
             user: [
                 {
                     question: 'I have some other questions to ask',
@@ -193,7 +194,7 @@ export const speech = [
                     redirectToAnswer: FAQ_HAIKU_EXAMPLE
                 },
                 {
-                    question: 'What is the mint date and price?',
+                    question: 'What is the mint date, price and total supply?',
                     redirectToAnswer: MINT_DEETS
                 },
                 {
@@ -301,7 +302,7 @@ export const speech = [
         data: {
             matsuo: `On November 28th, 2021 at 9pm EST (11/29 at 2am UTC), visit this website and talk to me to begin the "minting" process.
                     Each haiku will cost 0.01 Ether (plus gas fees) to mint. There is no limit on the numberof haikus you can mint,
-                    but you may only mint one at a time.`,
+                    but you may only mint one at a time. There will only be 575 AI Haikus ever created.`,
             user: [{}]
         }
     },
