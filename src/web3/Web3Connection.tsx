@@ -567,7 +567,7 @@ class Web3Connection extends React.Component<any, any> {
       this.setState({ pendingRequest: true });
 
       const haikuOptions = await axios.put(GENERATOR_URL_BASE + 'haiku', {
-        data: haikuTitle
+        haikuTitle
       }).then(res => res.data.haikus)
         .catch(err => console.error('error occurred while saving to Arweave.'));
 
