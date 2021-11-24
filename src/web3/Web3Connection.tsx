@@ -187,7 +187,9 @@ interface IAppState {
   imageUrl: string | null;
   currentStage: MintStage;
   haikuTitleHasError: boolean;
+  haikuTitle: string,
   haikuOptions: string[];
+  chosenHaiku: string | null;
 }
 
 const INITIAL_STATE: IAppState = {
@@ -211,7 +213,9 @@ const INITIAL_STATE: IAppState = {
   imageUrl: null,
   currentStage: MintStage.AUTH_MESSAGE,
   haikuTitleHasError: false,
-  haikuOptions: []
+  haikuTitle: '',
+  haikuOptions: [],
+  chosenHaiku: null
 };
 
 function initWeb3(provider: any) {
@@ -535,11 +539,16 @@ class Web3Connection extends React.Component<any, any> {
     }
   };
 
-  public chooseHaiku = async (index: number) => {
-    console.log(`this.state.haikuOptions[index]`, this.state.haikuOptions[index]);
+  public chooseHaiku = (chosenHaiku: string) => {
+    console.log(`chosenHaiku`, chosenHaiku);
+
+    this.setState({
+      currentStage: MintStage.MINT,
+      chosenHaiku
+    });
   }
 
-  public onSubmitHaikuTitle = async () => {
+  public onSubmitHaikuTitle = async (haikuTitle: string) => {
     const { web3, address } = this.state;
 
     if (!web3) {
@@ -558,7 +567,7 @@ class Web3Connection extends React.Component<any, any> {
       this.setState({ pendingRequest: true });
 
       const haikuOptions = await axios.put(GENERATOR_URL_BASE + 'haiku', {
-        data: 'Hello from React! ✌🏻'
+        data: haikuTitle
       }).then(res => res.data.haikus)
         .catch(err => console.error('error occurred while saving to Arweave.'));
 
@@ -568,6 +577,7 @@ class Web3Connection extends React.Component<any, any> {
         web3,
         pendingRequest: false,
         showModal: false,
+        haikuTitle,
         haikuOptions,
         currentStage: MintStage.PICK_HAIKU
       });
@@ -578,8 +588,8 @@ class Web3Connection extends React.Component<any, any> {
 
   }
 
-  public saveImageToArweave = async () => {
-    const { web3, contract, mintPriceInWei } = this.state;
+  public mint = async () => {
+    const { web3, contract, mintPriceInWei, haikuTitle, chosenHaiku } = this.state;
 
     if (!web3 || !contract || !mintPriceInWei) {
       console.error('failed check for the state\'s web3, contract, and mintPriceInGwei');
@@ -595,7 +605,8 @@ class Web3Connection extends React.Component<any, any> {
 
       // trying out auth on server
       const result = await axios.put(GENERATOR_URL_BASE + 'arweave', {
-        data: 'Hello from React! ✌🏻'
+        haikuTitle,
+        haikuContent: chosenHaiku
       }).then(res => res.data)
         .catch(err => console.error('error occurred while saving to Arweave.'));
 
@@ -794,6 +805,10 @@ class Web3Connection extends React.Component<any, any> {
     this.setState({ ...INITIAL_STATE });
   };
 
+  handleTitleInputChange = (e: any) => {
+    this.setState({ haikuTitle: e.target.value });
+  };
+
   public render = () => {
     const {
       assets,
@@ -805,6 +820,9 @@ class Web3Connection extends React.Component<any, any> {
       maxSupply,
       haikuTitleHasError,
       currentStage,
+      haikuTitle,
+      haikuOptions,
+      chosenHaiku,
       fetching,
       showModal,
       pendingRequest,
@@ -831,7 +849,6 @@ class Web3Connection extends React.Component<any, any> {
               </Column>
             ) : !!assets && !!assets.length ? (
               <SBalances>
-                <h3>Mint</h3>
 
                 {currentStage === MintStage.AUTH_MESSAGE ? (
                   <Fade in={true}>
@@ -862,12 +879,8 @@ class Web3Connection extends React.Component<any, any> {
                           label="Haiku title"
                           autoComplete="false"
                           error={haikuTitleHasError}
-                        // hintText="Password"
-                        // floatingLabelText="Password"
-                        // type="password"
-                        // errorText={this.state.password_error_text}
-                        // onChange={e => this.changeValue(e, 'password')}
-                        // onBlur={this.isDisabled}
+                          // value={haikuTitle}
+                          onChange={this.handleTitleInputChange}
                         />
                         {haikuTitleHasError ?
                           (<Fade in={true}>
@@ -875,7 +888,7 @@ class Web3Connection extends React.Component<any, any> {
                           </Fade>)
                           : <></>}
                         <STestButtonContainer>
-                          <STestButton onClick={this.onSubmitHaikuTitle}>
+                          <STestButton onClick={() => this.onSubmitHaikuTitle(haikuTitle)}>
                             Submit
                           </STestButton>
                         </STestButtonContainer>
@@ -893,7 +906,7 @@ class Web3Connection extends React.Component<any, any> {
                         </p>
 
                         <Card sx={{ mx: 'auto', width: '33vw', marginBottom: '2.5rem', marginTop: '1rem' }}>
-                          <span onClick={() => this.chooseHaiku(0)}>
+                          <span onClick={() => this.chooseHaiku(haikuOptions[0])}>
                             <CardActionArea>
                               <CardContent>
                                 {stylizeHaikuOption(this.state.haikuOptions[0])}
@@ -903,7 +916,7 @@ class Web3Connection extends React.Component<any, any> {
                         </Card>
 
                         <Card sx={{ mx: 'auto', width: '33vw', marginBottom: '2.5rem' }}>
-                          <span onClick={() => this.chooseHaiku(1)}>
+                          <span onClick={() => this.chooseHaiku(haikuOptions[1])}>
                             <CardActionArea>
                               <CardContent>
                                 {stylizeHaikuOption(this.state.haikuOptions[1])}
@@ -913,7 +926,7 @@ class Web3Connection extends React.Component<any, any> {
                         </Card>
 
                         <Card sx={{ mx: 'auto', width: '33vw', marginBottom: '2.5rem' }}>
-                          <span onClick={() => this.chooseHaiku(2)}>
+                          <span onClick={() => this.chooseHaiku(haikuOptions[2])}>
                             <CardActionArea>
                               <CardContent>
                                 {stylizeHaikuOption(this.state.haikuOptions[2])}
@@ -930,10 +943,18 @@ class Web3Connection extends React.Component<any, any> {
 
                 {currentStage === MintStage.MINT ? (
                   <Column center>
-                    <p>Please click this button to log in with your wallet:</p>
+                    <p>You're about to make this haiku a piece of immortal art:</p>
+
+                    <Card sx={{ mx: 'auto', width: '33vw', marginBottom: '2.5rem' }}>
+                      <CardContent>
+                        <h4>{haikuTitle}</h4>
+                        {stylizeHaikuOption(chosenHaiku ?? '')}
+                      </CardContent>
+                    </Card>
+                    <p>Are you ready for Matsuo to create this haiku on his sacred paper and imbue it with unique properties?</p>
                     <STestButtonContainer>
-                      <STestButton onClick={this.saveImageToArweave}>
-                        {MINT_NFT}
+                      <STestButton onClick={this.mint}>
+                        Mint for {mintPrice}
                       </STestButton>
                     </STestButtonContainer>
                   </Column>
