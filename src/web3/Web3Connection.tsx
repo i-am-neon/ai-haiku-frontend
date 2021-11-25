@@ -56,6 +56,8 @@ import { Card, CardActionArea, CardContent, Fade } from "@mui/material";
 import TextField from '@mui/material/TextField';
 import { stylizeHaikuOption } from "./helpers/tsxUtilities";
 import { RESTRICTED_PHRASES } from "./helpers/restrictedPhrases";
+import WalletLink from "walletlink";
+import coinbaseWalletLogo from '../assets/wallets/coinbaseWallet.png';
 
 const TitleTextField = styled(TextField)({
   '& input:valid + fieldset': {
@@ -267,6 +269,7 @@ class Web3Connection extends React.Component<any, any> {
     if (this.web3Modal.cachedProvider) {
       this.onConnect();
     }
+    // this.resetApp()
   }
 
   public onConnect = async () => {
@@ -285,9 +288,9 @@ class Web3Connection extends React.Component<any, any> {
     const chainId = await web3.eth.chainId();
 
     // To stop from using mainnet before launch so I don't spend real money
-    if (NODE_ENV !== 'production' && chainId === 1) {
-      throw new Error("Please switch Metamask to a testnet.");
-    }
+    // if (NODE_ENV !== 'production' && chainId === 1) {
+    //   throw new Error("Please switch Metamask to a testnet.");
+    // }
 
     const _provider = new ethers.providers.Web3Provider(window.ethereum);
 
@@ -355,25 +358,47 @@ class Web3Connection extends React.Component<any, any> {
           infuraId: process.env.REACT_APP_INFURA_ID
         }
       },
-      torus: {
-        package: Torus
-      },
-      fortmatic: {
-        package: Fortmatic,
+      'custom-coinbase': {
+        display: {
+          logo: coinbaseWalletLogo,
+          name: 'Coinbase',
+          description: 'Connect with Coinbase Wallet',
+        },
         options: {
-          key: process.env.REACT_APP_FORTMATIC_KEY
-        }
+          appName: 'app', // Your app name
+          networkUrl: `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_ID}`,
+          chainId: this.state.chainId,
+        },
+        package: WalletLink,
+        connector: async (_: any, options: any) => {
+          const { appName, networkUrl, chainId } = options
+          const walletLink = new WalletLink({
+            appName
+          });
+          const provider = walletLink.makeWeb3Provider(networkUrl, chainId);
+          await provider.enable();
+          return provider;
+        },
       },
+      // torus: {
+      //   package: Torus
+      // },
+      // fortmatic: {
+      //   package: Fortmatic,
+      //   options: {
+      //     key: process.env.REACT_APP_FORTMATIC_KEY
+      //   }
+      // },
       authereum: {
         package: Authereum
       },
-      bitski: {
-        package: Bitski,
-        options: {
-          clientId: process.env.REACT_APP_BITSKI_CLIENT_ID,
-          callbackUrl: window.location.href + "bitski-callback.html"
-        }
-      }
+      // bitski: {
+      //   package: Bitski,
+      //   options: {
+      //     clientId: process.env.REACT_APP_BITSKI_CLIENT_ID,
+      //     callbackUrl: window.location.href + "bitski-callback.html"
+      //   }
+      // }
     };
     return providerOptions;
   };
