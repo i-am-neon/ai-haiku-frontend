@@ -62,6 +62,7 @@ interface ICloseButtonStyleProps {
 const SCloseButton = styled.div<ICloseButtonStyleProps>`
   transition: ${transitions.short};
   position: absolute;
+  z-index: 99;
   width: ${({ size }) => `${size}px`};
   height: ${({ size }) => `${size}px`};
   right: ${({ size }) => `${size / 1.6667}px`};

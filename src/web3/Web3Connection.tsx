@@ -24,6 +24,7 @@ import Loader from "./components/Loader";
 import ModalResult from "./components/ModalResult";
 import AccountAssets from "./components/AccountAssets";
 import ConnectButton from "./components/ConnectButton";
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
 import { apiGetAccountAssets } from "./helpers/api";
 import {
@@ -82,7 +83,6 @@ const TitleTextField = styled(TextField)({
 const SLayout = styled.div`
   position: relative;
   width: 100%;
-  min-height: 100vh;
   text-align: center;
 `;
 
@@ -193,6 +193,9 @@ interface IAppState {
   haikuTitle: string,
   haikuOptions: string[];
   chosenHaiku: string | null;
+  etherscanLink: string | null;
+  imageUri: string | null;
+  paperName: string | null;
 }
 
 const INITIAL_STATE: IAppState = {
@@ -220,7 +223,10 @@ const INITIAL_STATE: IAppState = {
   haikuTitleError: null,
   haikuTitle: '',
   haikuOptions: [],
-  chosenHaiku: null
+  chosenHaiku: null,
+  etherscanLink: null,
+  imageUri: null,
+  paperName: null
 };
 
 function initWeb3(provider: any) {
@@ -505,11 +511,11 @@ class Web3Connection extends React.Component<any, any> {
       this.toggleModal();
 
       // toggle pending request indicator
-      this.setState({ 
+      this.setState({
         pendingRequest: true,
         modalTitle: 'Pending signature request',
         modalContent: 'Please open your wallet and sign the message. This is for security purposes and does not cost you anything.'
-       });
+      });
 
       // send message
       const result = await web3.eth.personal.sign(hexMsg, address);
@@ -556,7 +562,7 @@ class Web3Connection extends React.Component<any, any> {
         containsRestrictedPhrase = true;
       }
     }
-    
+
     if (title === '') {
       return 'Please write a haiku title.';
     } else if (title.length > 20) {
@@ -588,11 +594,11 @@ class Web3Connection extends React.Component<any, any> {
       this.toggleModal();
 
       // toggle pending request indicator
-      this.setState({ 
+      this.setState({
         pendingRequest: true,
-        modalTitle: 'Writing...',
+        modalTitle: 'One moment...',
         modalContent: 'Matsuo is writing your haikus'
-       });
+      });
 
       const haikuOptions = await axios.put(GENERATOR_URL_BASE + 'haiku', {
         haikuTitle
@@ -618,7 +624,7 @@ class Web3Connection extends React.Component<any, any> {
 
   public chooseHaiku = (chosenHaiku: string) => {
     console.log(`chosenHaiku`, chosenHaiku);
-    
+
 
     this.setState({
       currentStage: MintStage.MINT,
@@ -639,8 +645,11 @@ class Web3Connection extends React.Component<any, any> {
       this.toggleModal();
 
       // toggle pending request indicator
-      this.setState({ pendingRequest: true });
-
+      this.setState({
+        pendingRequest: true,
+        modalTitle: 'Minting...',
+        modalContent: 'Matsuo is creating your haiku and saving it to the blockchain. Please be patient, he\'s 327 years old!'
+      });
       // trying out auth on server
       const result = await axios.put(GENERATOR_URL_BASE + 'arweave', {
         haikuTitle,
@@ -653,10 +662,12 @@ class Web3Connection extends React.Component<any, any> {
       const signature = result.signature;
 
       const mintTx = await this.state.contract!.mint(metadataUri, signature, { value: mintPriceInWei });
-      console.log('mintResult :>> ', mintTx);
-      // IMPLEMENT THE BELOW in the loading modal, remove rinkeby for production
-      console.log('REMOVE rinkeby in the below text for production');
-      console.log('view status on: https://rinkeby.etherscan.io/tx/' + mintTx.hash);
+
+      if (NODE_ENV === 'production') {
+        this.setState({ etherscanLink: 'https://etherscan.io/tx/' + mintTx.hash });
+      } else {
+        this.setState({ etherscanLink: 'https://rinkeby.etherscan.io/tx/' + mintTx.hash });
+      }
 
 
       await mintTx.wait().then((res: any) => {
@@ -668,22 +679,33 @@ class Web3Connection extends React.Component<any, any> {
       const formattedResult = {
         action: MINT_NFT,
         metadataUri,
-        signature
+        signature,
       };
 
       // display result
       this.setState({
         web3,
         pendingRequest: false,
+        showModal: false,
         lastTxn: txnId,
         metadataUri,
-        result: formattedResult || null
+        imageUri: result.imageUri,
+        paperName: result.paperName,
+        currentStage: MintStage.MINT_SUCCESS
       });
     } catch (error) {
       console.error(error); // tslint:disable-line
       this.setState({ web3, pendingRequest: false, result: null });
     }
   };
+
+  public mintAnother = () => {
+    this.setState({
+      currentStage: MintStage.PICK_TITLE,
+      etherscanLink: null
+    });
+  }
+
 
   public getStatusFromLastTxn = async () => {
     const { web3, lastTxn } = this.state;
@@ -866,7 +888,10 @@ class Web3Connection extends React.Component<any, any> {
       pendingRequest,
       modalTitle,
       modalContent,
-      result
+      result,
+      etherscanLink,
+      imageUri,
+      paperName
     } = this.state;
     return (
       <SLayout>
@@ -894,7 +919,7 @@ class Web3Connection extends React.Component<any, any> {
                   <Fade in={true}>
                     <span>
                       <Column center>
-                        <p>Please log in with your wallet by signing a message:</p>
+                        <p>Please verify your wallet by signing a message:</p>
                         <STestButtonContainer>
                           <STestButton onClick={this.signAuthMessage}>
                             {SIGN_AUTH}
@@ -1000,6 +1025,31 @@ class Web3Connection extends React.Component<any, any> {
                   </Column>
                 ) : <></>}
 
+                {currentStage === MintStage.MINT_SUCCESS ? (
+                  <Column center>
+                    <h2>Mint Successful!</h2>
+                    <p>Congratulations, you now own this work of art entitled, <b>{haikuTitle}</b>:</p>
+                    <img
+                      src={imageUri ?? ''}
+                      alt={'An image of the following haiku on paper: ' + chosenHaiku}
+                      style={{ width: '33vw' }}
+                    />
+
+                    <p>The paper chosen is <i>{paperName}</i>.
+                      <br />
+                      <a href='/paper' target="_blank" rel="noreferrer">
+                        Learn more about the paper <OpenInNewIcon fontSize="small" />
+                      </a>
+                    </p>
+
+                    <STestButtonContainer>
+                      <STestButton onClick={this.mintAnother}>
+                        Mint Another Haiku
+                      </STestButton>
+                    </STestButtonContainer>
+                  </Column>
+                ) : <></>}
+
 
                 {/* <STestButton onClick={this.getStatusFromLastTxn}>
                       {GET_STATUS_FROM_TXN}
@@ -1024,6 +1074,13 @@ class Web3Connection extends React.Component<any, any> {
                 <SModalParagraph>
                   {modalContent}
                 </SModalParagraph>
+                <SModalParagraph>
+                  {!!etherscanLink ? (
+                    <a href={etherscanLink} target="_blank" rel="noreferrer">
+                      View on Etherscan <OpenInNewIcon fontSize="small" />
+                    </a>
+                  ) : <></>}
+                </SModalParagraph>
               </SContainer>
             </SModalContainer>
           ) : result ? (
@@ -1033,7 +1090,7 @@ class Web3Connection extends React.Component<any, any> {
             </SModalContainer>
           ) : (
             <SModalContainer>
-              <SModalTitle>{"Call Request Rejected"}</SModalTitle>
+              <SModalTitle>{"Request Rejected by Wallet"}</SModalTitle>
             </SModalContainer>
           )}
         </Modal>

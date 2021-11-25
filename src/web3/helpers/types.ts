@@ -2,7 +2,8 @@ export enum MintStage {
   AUTH_MESSAGE,
   PICK_TITLE,
   PICK_HAIKU,
-  MINT
+  MINT,
+  MINT_SUCCESS
 }
 
 export interface IAssetData {
