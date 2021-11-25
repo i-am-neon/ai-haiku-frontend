@@ -1,6 +1,6 @@
 export const ETH_SEND_TRANSACTION = 'eth.sendTransaction()'
 export const ETH_SIGN = 'eth.sign()'
-export const PERSONAL_SIGN = 'Sign auth message'
+export const PERSONAL_SIGN = 'Sign Message'
 export const MINT_NFT = '✨ Mint ✨'
 export const GET_STATUS_FROM_TXN = '🧐 Txn Status 🤨'
 export const BOX_GET_PROFILE = 'box.getProfile()'

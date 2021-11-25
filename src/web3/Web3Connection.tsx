@@ -54,6 +54,7 @@ import { GENERATOR_URL_BASE, NODE_ENV } from "../utils/envVariables";
 import { Card, CardActionArea, CardContent, Fade } from "@mui/material";
 import TextField from '@mui/material/TextField';
 import { stylizeHaikuOption } from "./helpers/tsxUtilities";
+import { RESTRICTED_PHRASES } from "./helpers/restrictedPhrases";
 
 const TitleTextField = styled(TextField)({
   '& input:valid + fieldset': {
@@ -183,10 +184,12 @@ interface IAppState {
   numberMinted: number | null;
   maxSupply: number | null;
   result: any | null;
+  modalTitle: string;
+  modalContent: string;
   lastTxn: string | null;
   imageUrl: string | null;
   currentStage: MintStage;
-  haikuTitleHasError: boolean;
+  haikuTitleError: string | null;
   haikuTitle: string,
   haikuOptions: string[];
   chosenHaiku: string | null;
@@ -203,6 +206,8 @@ const INITIAL_STATE: IAppState = {
   contract: null,
   assets: [],
   showModal: false,
+  modalTitle: '',
+  modalContent: '',
   pendingRequest: false,
   mintPriceInWei: null,
   mintPrice: null,
@@ -212,7 +217,7 @@ const INITIAL_STATE: IAppState = {
   lastTxn: null,
   imageUrl: null,
   currentStage: MintStage.AUTH_MESSAGE,
-  haikuTitleHasError: false,
+  haikuTitleError: null,
   haikuTitle: '',
   haikuOptions: [],
   chosenHaiku: null
@@ -500,7 +505,11 @@ class Web3Connection extends React.Component<any, any> {
       this.toggleModal();
 
       // toggle pending request indicator
-      this.setState({ pendingRequest: true });
+      this.setState({ 
+        pendingRequest: true,
+        modalTitle: 'Pending signature request',
+        modalContent: 'Please open your wallet and sign the message. This is for security purposes and does not cost you anything.'
+       });
 
       // send message
       const result = await web3.eth.personal.sign(hexMsg, address);
@@ -539,13 +548,25 @@ class Web3Connection extends React.Component<any, any> {
     }
   };
 
-  public chooseHaiku = (chosenHaiku: string) => {
-    console.log(`chosenHaiku`, chosenHaiku);
-
-    this.setState({
-      currentStage: MintStage.MINT,
-      chosenHaiku
-    });
+  public validateTitle = (title: string): string | null => {
+    let containsRestrictedPhrase = false;
+    for (let i = 0; i < RESTRICTED_PHRASES.length; i++) {
+      if (new RegExp("\\b" + RESTRICTED_PHRASES[i].toLowerCase() + "\\b").test(title.toLowerCase())) {
+        console.log(`RESTRICTED_PHRASES[i]`, RESTRICTED_PHRASES[i]);
+        containsRestrictedPhrase = true;
+      }
+    }
+    
+    if (title === '') {
+      return 'Please write a haiku title.';
+    } else if (title.length > 20) {
+      return 'That\'s too long. Please write a title that is fewer than 20 characters.';
+    } else if (/\p{Extended_Pictographic}/u.test(title)) {
+      return 'Matsuo does not understand Emojis!';
+    } else if (containsRestrictedPhrase) {
+      return 'Oy, bite your tongue! This title did not pass my content filter.';
+    }
+    return null;
   }
 
   public onSubmitHaikuTitle = async (haikuTitle: string) => {
@@ -555,8 +576,11 @@ class Web3Connection extends React.Component<any, any> {
       return;
     }
 
-    if (false) {
-      this.setState({ haikuTitleHasError: true });
+    const validationResult = this.validateTitle(haikuTitle);
+
+    if (!!validationResult) {
+      this.setState({ haikuTitleError: validationResult });
+      return;
     }
     try {
 
@@ -564,7 +588,11 @@ class Web3Connection extends React.Component<any, any> {
       this.toggleModal();
 
       // toggle pending request indicator
-      this.setState({ pendingRequest: true });
+      this.setState({ 
+        pendingRequest: true,
+        modalTitle: 'Writing...',
+        modalContent: 'Matsuo is writing your haikus'
+       });
 
       const haikuOptions = await axios.put(GENERATOR_URL_BASE + 'haiku', {
         haikuTitle
@@ -586,6 +614,16 @@ class Web3Connection extends React.Component<any, any> {
       this.setState({ web3, pendingRequest: false, result: null });
     }
 
+  }
+
+  public chooseHaiku = (chosenHaiku: string) => {
+    console.log(`chosenHaiku`, chosenHaiku);
+    
+
+    this.setState({
+      currentStage: MintStage.MINT,
+      chosenHaiku
+    });
   }
 
   public mint = async () => {
@@ -818,7 +856,7 @@ class Web3Connection extends React.Component<any, any> {
       mintPrice,
       numberMinted,
       maxSupply,
-      haikuTitleHasError,
+      haikuTitleError,
       currentStage,
       haikuTitle,
       haikuOptions,
@@ -826,6 +864,8 @@ class Web3Connection extends React.Component<any, any> {
       fetching,
       showModal,
       pendingRequest,
+      modalTitle,
+      modalContent,
       result
     } = this.state;
     return (
@@ -854,7 +894,7 @@ class Web3Connection extends React.Component<any, any> {
                   <Fade in={true}>
                     <span>
                       <Column center>
-                        <p>Please log in with your wallet:</p>
+                        <p>Please log in with your wallet by signing a message:</p>
                         <STestButtonContainer>
                           <STestButton onClick={this.signAuthMessage}>
                             {SIGN_AUTH}
@@ -872,19 +912,19 @@ class Web3Connection extends React.Component<any, any> {
                         <p>
                           What would you like to title your haiku?
                           <br />
-                          <i>(15 character limit)</i>
+                          <i>(20 character limit)</i>
                         </p>
 
                         <TitleTextField
                           label="Haiku title"
                           autoComplete="false"
-                          error={haikuTitleHasError}
+                          error={!!haikuTitleError}
                           // value={haikuTitle}
                           onChange={this.handleTitleInputChange}
                         />
-                        {haikuTitleHasError ?
+                        {haikuTitleError ?
                           (<Fade in={true}>
-                            <p style={{ color: 'red' }}>ERROR</p>
+                            <p style={{ color: 'red' }}>{haikuTitleError}</p>
                           </Fade>)
                           : <></>}
                         <STestButtonContainer>
@@ -978,11 +1018,11 @@ class Web3Connection extends React.Component<any, any> {
         <Modal show={showModal} toggleModal={this.toggleModal}>
           {pendingRequest ? (
             <SModalContainer>
-              <SModalTitle>{"Pending Call Request"}</SModalTitle>
+              <SModalTitle>{modalTitle}</SModalTitle>
               <SContainer>
                 <Loader />
                 <SModalParagraph>
-                  {"Approve or reject request using your wallet"}
+                  {modalContent}
                 </SModalParagraph>
               </SContainer>
             </SModalContainer>
