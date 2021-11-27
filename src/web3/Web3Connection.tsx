@@ -194,6 +194,7 @@ interface IAppState {
   imageUrl: string | null;
   currentStage: MintStage | undefined;
   whiteListedReadyToMintMessage: string | undefined;
+  isWhitelisted: boolean;
   haikuTitleError: string | null;
   haikuTitle: string,
   haikuOptions: string[];
@@ -226,6 +227,7 @@ const INITIAL_STATE: IAppState = {
   imageUrl: null,
   currentStage: undefined,
   whiteListedReadyToMintMessage: undefined,
+  isWhitelisted: false,
   haikuTitleError: null,
   haikuTitle: '',
   haikuOptions: [],
@@ -306,13 +308,14 @@ class Web3Connection extends React.Component<any, any> {
 
     console.log('Contract :>> ', contract);
 
-    const mintPriceInWei = await contract.PRICE();
+    const mintPriceInWei = await contract.price();
     const mintPrice = ethers.utils.formatEther(mintPriceInWei) + ' Ξ'
 
     const numberMinted = await contract.totalSupply().then((bigNum: BigNumber) => bigNum.toNumber());
-    const maxSupply = await contract.MAX_SUPPLY().then((bigNum: BigNumber) => bigNum.toNumber());
+    const maxSupply = await contract.maxSupply().then((bigNum: BigNumber) => bigNum.toNumber());
 
     let currentStage;
+    let isWhitelisted = false;
     let whiteListedReadyToMintMessage = undefined;
     if (Date.now() >= PUBLIC_MINT_TIMESTAMP_MS) {
       // Public mint is open
@@ -324,6 +327,7 @@ class Web3Connection extends React.Component<any, any> {
     ) {
       // user is whitelisted and it is time for whitelist mint
       currentStage = MintStage.AUTH_MESSAGE;
+      isWhitelisted = true;
       whiteListedReadyToMintMessage = 'You\'re on the whitelist! You may mint up to three haikus during this hour. Once the public mint is open, you may mint as many as you like.'
     } else if (
       Date.now() < WHITELIST_MINT_TIMESTAMP_MS &&
@@ -331,6 +335,7 @@ class Web3Connection extends React.Component<any, any> {
     ) {
       // user is whitelisted BUT whitelist mint not ready yet
       currentStage = MintStage.WHITE_LISTED_BUT_MINT_NOT_READY;
+      isWhitelisted = true;
     } else if (
       Date.now() < PUBLIC_MINT_TIMESTAMP_MS &&
       !this.isUserWhitelisted(address)
@@ -352,7 +357,8 @@ class Web3Connection extends React.Component<any, any> {
       numberMinted,
       maxSupply,
       currentStage,
-      whiteListedReadyToMintMessage
+      whiteListedReadyToMintMessage,
+      isWhitelisted
     });
     await this.getAccountAssets();
   };
@@ -698,7 +704,7 @@ class Web3Connection extends React.Component<any, any> {
   }
 
   public mint = async () => {
-    const { web3, contract, mintPriceInWei, haikuTitle, chosenHaiku } = this.state;
+    const { web3, contract, mintPriceInWei, haikuTitle, chosenHaiku, address, isWhitelisted } = this.state;
 
     if (!web3 || !contract || !mintPriceInWei) {
       console.error('failed check for the state\'s web3, contract, and mintPriceInGwei');
@@ -715,18 +721,37 @@ class Web3Connection extends React.Component<any, any> {
         modalTitle: 'Minting...',
         modalContent: 'Matsuo is creating your haiku and saving it to the blockchain. Please be patient, he\'s 327 years old!'
       });
-      // trying out auth on server
-      const result = await axios.put(GENERATOR_URL_BASE + 'arweave', {
-        haikuTitle,
-        haikuContent: chosenHaiku
-      }).then(res => res.data)
-        .catch(err => console.error('error occurred while saving to Arweave.'));
+
+      let result;
+      if (isWhitelisted) {
+        result = await axios.put(GENERATOR_URL_BASE + 'arweave', {
+          haikuTitle,
+          haikuContent: chosenHaiku,
+          address
+        }).then(res => res.data)
+          .catch(err => console.error('error occurred while saving to Arweave.'));
+
+      } else {
+        result = await axios.put(GENERATOR_URL_BASE + 'arweave', {
+          haikuTitle,
+          haikuContent: chosenHaiku
+        }).then(res => res.data)
+          .catch(err => console.error('error occurred while saving to Arweave.'));
+
+      }
 
       const txnId = result.txnId;
       const metadataUri = result.metadataUri;
       const signature = result.signature;
+      const whitelistSignature = result.whitelistSignature ?? undefined;
 
-      const mintTx = await this.state.contract!.mint(metadataUri, signature, { value: mintPriceInWei });
+      let mintTx;
+      if (isWhitelisted) {
+        mintTx = await this.state.contract!.whitelistMint(metadataUri, signature, { value: mintPriceInWei });
+      } else {
+        mintTx = await this.state.contract!.publicMint(metadataUri, signature, { value: mintPriceInWei });
+      }
+
 
       if (NODE_ENV === 'production') {
         this.setState({ etherscanLink: 'https://etherscan.io/tx/' + mintTx.hash });
@@ -1001,8 +1026,8 @@ class Web3Connection extends React.Component<any, any> {
                       <Column center>
                         <p>
                           I'm terribly sorry, but you are not on the whitelist. If you believe
-                          this is a mistake, please DM NΞ◎N in 
-                          the <a style={{fontSize: 'large'}} href='https://discord.gg/aihaiku' target='_blank' rel="noreferrer">Discord</a>.
+                          this is a mistake, please DM NΞ◎N in
+                          the <a style={{ fontSize: 'large' }} href='https://discord.gg/aihaiku' target='_blank' rel="noreferrer">Discord</a>.
                           Otherwise, you may simply refresh the page when the public mint is open.
                         </p>
                         <PublicMintCountdown />
