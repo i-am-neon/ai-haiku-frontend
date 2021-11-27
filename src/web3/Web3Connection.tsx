@@ -50,7 +50,7 @@ import {
 import contractAddress from '../contracts/contract-address.json';
 import AiHaikuContractArtifact from '../contracts/AIHaiku.json';
 import { callBalanceOf, callTransfer } from "./helpers/web3";
-import { GENERATOR_URL_BASE, NODE_ENV } from "../utils/envVariables";
+import { GENERATOR_URL_BASE, NODE_ENV, PUBLIC_MINT_TIMESTAMP_MS, WHITELIST_MINT_TIMESTAMP_MS } from "../utils/envVariables";
 
 import { Card, CardActionArea, CardContent, Fade } from "@mui/material";
 import TextField from '@mui/material/TextField';
@@ -58,6 +58,8 @@ import { stylizeHaikuOption } from "./helpers/tsxUtilities";
 import { RESTRICTED_PHRASES } from "./helpers/restrictedPhrases";
 import WalletLink from "walletlink";
 import coinbaseWalletLogo from '../assets/wallets/coinbaseWallet.png';
+import MintCountdown, { PublicMintCountdown, WhitelistMintCountdown } from "../components/MintCountdown";
+import { whitelistedAddresses } from "./constants/whitelist";
 
 const TitleTextField = styled(TextField)({
   '& input:valid + fieldset': {
@@ -190,7 +192,8 @@ interface IAppState {
   modalContent: string;
   lastTxn: string | null;
   imageUrl: string | null;
-  currentStage: MintStage;
+  currentStage: MintStage | undefined;
+  whiteListedReadyToMintMessage: string | undefined;
   haikuTitleError: string | null;
   haikuTitle: string,
   haikuOptions: string[];
@@ -221,7 +224,8 @@ const INITIAL_STATE: IAppState = {
   result: null,
   lastTxn: null,
   imageUrl: null,
-  currentStage: MintStage.AUTH_MESSAGE,
+  currentStage: undefined,
+  whiteListedReadyToMintMessage: undefined,
   haikuTitleError: null,
   haikuTitle: '',
   haikuOptions: [],
@@ -308,6 +312,33 @@ class Web3Connection extends React.Component<any, any> {
     const numberMinted = await contract.totalSupply().then((bigNum: BigNumber) => bigNum.toNumber());
     const maxSupply = await contract.MAX_SUPPLY().then((bigNum: BigNumber) => bigNum.toNumber());
 
+    let currentStage;
+    let whiteListedReadyToMintMessage = undefined;
+    if (Date.now() >= PUBLIC_MINT_TIMESTAMP_MS) {
+      // Public mint is open
+      currentStage = MintStage.AUTH_MESSAGE;
+    } else if (
+      Date.now() < PUBLIC_MINT_TIMESTAMP_MS &&
+      Date.now() >= WHITELIST_MINT_TIMESTAMP_MS &&
+      this.isUserWhitelisted(address)
+    ) {
+      // user is whitelisted and it is time for whitelist mint
+      currentStage = MintStage.AUTH_MESSAGE;
+      whiteListedReadyToMintMessage = 'You\'re on the whitelist! You may mint up to three haikus during this hour. Once the public mint is open, you may mint as many as you like.'
+    } else if (
+      Date.now() < WHITELIST_MINT_TIMESTAMP_MS &&
+      this.isUserWhitelisted(address)
+    ) {
+      // user is whitelisted BUT whitelist mint not ready yet
+      currentStage = MintStage.WHITE_LISTED_BUT_MINT_NOT_READY;
+    } else if (
+      Date.now() < PUBLIC_MINT_TIMESTAMP_MS &&
+      !this.isUserWhitelisted(address)
+    ) {
+      // user is not whitelisted and it is before public mint time
+      currentStage = MintStage.NOT_WHITE_LISTED_AND_MINT_NOT_READY;
+    }
+
     await this.setState({
       web3,
       provider,
@@ -319,10 +350,19 @@ class Web3Connection extends React.Component<any, any> {
       mintPriceInWei,
       mintPrice,
       numberMinted,
-      maxSupply
+      maxSupply,
+      currentStage,
+      whiteListedReadyToMintMessage
     });
     await this.getAccountAssets();
   };
+
+  public isUserWhitelisted(address: string): boolean {
+    if (whitelistedAddresses.includes(address)) {
+      return true;
+    }
+    return false;
+  }
 
   public subscribeProvider = async (provider: any) => {
     if (!provider.on) {
@@ -905,6 +945,7 @@ class Web3Connection extends React.Component<any, any> {
       maxSupply,
       haikuTitleError,
       currentStage,
+      whiteListedReadyToMintMessage,
       haikuTitle,
       haikuOptions,
       chosenHaiku,
@@ -940,11 +981,43 @@ class Web3Connection extends React.Component<any, any> {
             ) : !!assets && !!assets.length ? (
               <SBalances>
 
+                {currentStage === MintStage.WHITE_LISTED_BUT_MINT_NOT_READY ? (
+                  <Fade in={true}>
+                    <span>
+                      <Column center>
+                        <p>
+                          Congratulations, you're on the whitelist! Unfortunately you're a bit early.
+                          Please refresh this page when it is time for the whitelist mint.
+                        </p>
+                        <WhitelistMintCountdown />
+                      </Column>
+                    </span>
+                  </Fade>
+                ) : <></>}
+
+                {currentStage === MintStage.NOT_WHITE_LISTED_AND_MINT_NOT_READY ? (
+                  <Fade in={true}>
+                    <span>
+                      <Column center>
+                        <p>
+                          I'm terribly sorry, but you are not on the whitelist. If you believe
+                          this is a mistake, please DM NΞ◎N in 
+                          the <a style={{fontSize: 'large'}} href='https://discord.gg/aihaiku' target='_blank' rel="noreferrer">Discord</a>.
+                          Otherwise, you may simply refresh the page when the public mint is open.
+                        </p>
+                        <PublicMintCountdown />
+                      </Column>
+                    </span>
+                  </Fade>
+                ) : <></>}
+
                 {currentStage === MintStage.AUTH_MESSAGE ? (
                   <Fade in={true}>
                     <span>
                       <Column center>
-                        <p>Please verify your wallet by signing a message:</p>
+                        <h3>Time to Mint</h3>
+                        {whiteListedReadyToMintMessage ? (<p>{whiteListedReadyToMintMessage}</p>) : <></>}
+                        <p>First, please verify your wallet by signing a message:</p>
                         <STestButtonContainer>
                           <STestButton onClick={this.signAuthMessage}>
                             {SIGN_AUTH}
@@ -1084,7 +1157,6 @@ class Web3Connection extends React.Component<any, any> {
               </SBalances>
             ) : (
               <SLanding center>
-                <h3>{`Test Web3Modal`}</h3>
                 <ConnectButton onClick={this.onConnect} />
               </SLanding>
             )}

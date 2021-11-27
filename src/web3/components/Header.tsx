@@ -103,7 +103,8 @@ const Header = (props: IHeaderProps) => {
           </SActiveChain>
         </>
       ) : (
-        <Banner />
+        // <Banner />
+        <></>
       )}
       {address && (
         <SActiveAccount>

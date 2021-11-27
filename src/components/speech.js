@@ -31,11 +31,11 @@ const WHAT_GET_WHEN_MINT_MATSUO_TEXT_1 = `Upon minting an AI Haiku, you will rec
                     Because you played a key role in the haiku's creation, the you will own the intellectual property and
                     commercial rights of your AI Haiku. If you sell your work, those rights are transferred to the new owner.
                     Your haiku will live immutably on the blockchain forever. Such an art form should be cherished and may even be
-                    passed down to the next generation.`;                
+                    passed down to the next generation.`;
 const WHAT_GET_WHEN_MINT_MATSUO_TEXT_2 = `I'm glad you asked. Additionally, you are entitled to a physical copy of your haiku.
                     It will be printed on paper handmade in Japan and include a QR code that points to the NFT version of the work.
                     I will ship your haiku anywhere in the world for free. However, if you do not opt in to receiving a physical
-                    copy, I will donate the funds it would have cost to create your paper haiku to a charity voted on by the community.`;                
+                    copy, I will donate the funds it would have cost to create your paper haiku to a charity voted on by the community.`;
 
 export const speech = [
     {
@@ -339,7 +339,8 @@ export const speech = [
     {
         name: EXPLAIN_MINT,
         data: {
-            matsuo: `BLAH`,
+            matsuo: `You will give me the subject of the haiku we will write. I, in turn, will present you with three haikus born from your idea.
+                    Then you will decide which one will live eternally on the blockchain as your NFT.`,
             user: [
                 {},
             ]

@@ -7,6 +7,8 @@ import TermsAndConditions from './components/TermsAndConditions';
 import Paper from './components/Paper';
 import Footer from './components/Footer';
 import { isMobile, isSafari, isFirefox } from 'react-device-detect';
+import { PUBLIC_MINT_TIMESTAMP_MS } from './utils/envVariables';
+import MintCountdown from './components/MintCountdown';
 
 const Web3Connection = lazy(() => import('./web3/Web3Connection'));
 
@@ -38,6 +40,10 @@ export default class App extends React.Component<AppProps, AppState> {
     loadingText?.remove();
   }
 
+  isMintReady(): boolean {
+    return Date.now() >= PUBLIC_MINT_TIMESTAMP_MS;
+  }
+
   render() {
     return (
       <div className="App">
@@ -45,7 +51,7 @@ export default class App extends React.Component<AppProps, AppState> {
           <NavBar />
           <Suspense fallback={<></>}>
             <Switch>
-              <Route path='/mint' component={Web3Connection}></Route>
+              <Route path='/mint' component={this.isMintReady() ? Web3Connection : MintCountdown}></Route>
               <Route path='/terms' component={TermsAndConditions}></Route>
               <Route path='/paper' component={Paper}></Route>
               <Route path='/' component={Home}></Route>
