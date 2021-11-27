@@ -739,14 +739,13 @@ class Web3Connection extends React.Component<any, any> {
           .catch(err => console.error('error occurred while saving to Arweave.'));
 
       }
-
       const txnId = result.txnId;
       const metadataUri = result.metadataUri;
       const signature = result.signature;
-      const whitelistSignature = result.whitelistSignature ?? undefined;
+      const useWhitelist = result.useWhitelist;
 
       let mintTx;
-      if (isWhitelisted) {
+      if (useWhitelist) {
         mintTx = await this.state.contract!.whitelistMint(metadataUri, signature, { value: mintPriceInWei });
       } else {
         mintTx = await this.state.contract!.publicMint(metadataUri, signature, { value: mintPriceInWei });
