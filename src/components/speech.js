@@ -20,7 +20,7 @@ const WHO_DUNNIT = 'whoDunnit';
 const READY_TO_MINT = 'readyToMint';
 const EXPLAIN_MINT = 'explainMint';
 
-const HAIKU_EXAMPLE_MATSUO_TEXT = `This is a haiku I recently created entitled, "The Milky Way".
+const HAIKU_EXAMPLE_MATSUO_TEXT = `This is a haiku I recently created titled, "The Milky Way".
                     The background will be one of four types of traditional handmade Japanese paper.
                     I will translate the haiku title you so gracefully provide into my mother tongue, Japanese. The title will go in the top right of the paper.
                     The center contains the haiku you choose of the three I create given the inspiration of your title.

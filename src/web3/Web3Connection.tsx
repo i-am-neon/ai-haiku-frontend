@@ -1150,7 +1150,7 @@ class Web3Connection extends React.Component<any, any> {
                 {currentStage === MintStage.MINT_SUCCESS ? (
                   <Column center>
                     <h2>Mint Successful!</h2>
-                    <p>Congratulations, you now own this work of art entitled, <b>{haikuTitle}</b>:</p>
+                    <p>Congratulations, you now own this work of art titled, <b>{haikuTitle}</b>:</p>
                     <img
                       src={imageUri ?? ''}
                       alt={'An image of the following haiku on paper: ' + chosenHaiku}
