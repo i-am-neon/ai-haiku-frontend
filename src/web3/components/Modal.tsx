@@ -172,7 +172,8 @@ class Modal extends React.Component<IModalProps, IModalState> {
         ref={(c) => (this.lightbox = c)}
       >
         <SModalContainer>
-          <SHitbox onClick={this.toggleModal} />
+          <SHitbox />
+          {/* <SHitbox onClick={this.toggleModal} /> */}
 
           <SCard>
             <SCloseButton size={25} color={"dark"} onClick={this.toggleModal} />
