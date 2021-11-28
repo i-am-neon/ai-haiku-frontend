@@ -991,15 +991,18 @@ class Web3Connection extends React.Component<any, any> {
     return (
       <SLayout>
         <Column maxWidth={1000} spanHeight>
-          <Header
-            connected={connected}
-            address={address}
-            chainId={chainId}
-            mintPrice={mintPrice}
-            numberMinted={numberMinted}
-            maxSupply={maxSupply}
-            killSession={this.resetApp}
-          />
+          {/* If on Rinkeby, don't show */}
+          {contractAddress.Token !== '0x7ec255DC61B91D330679683626ff9E500737AFCF' ? (
+            <Header
+              connected={connected}
+              address={address}
+              chainId={chainId}
+              mintPrice={mintPrice}
+              numberMinted={numberMinted}
+              maxSupply={maxSupply}
+              killSession={this.resetApp}
+            />
+          ) : <></>}
           <SContent>
             {fetching ? (
               <Column center>
