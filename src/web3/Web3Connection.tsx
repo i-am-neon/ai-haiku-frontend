@@ -634,7 +634,7 @@ class Web3Connection extends React.Component<any, any> {
     let containsRestrictedPhrase = false;
     for (let i = 0; i < RESTRICTED_PHRASES.length; i++) {
       if (new RegExp("\\b" + RESTRICTED_PHRASES[i].toLowerCase() + "\\b").test(title.toLowerCase())) {
-        console.log(`RESTRICTED_PHRASES[i]`, RESTRICTED_PHRASES[i]);
+        // console.log(`RESTRICTED_PHRASES[i]`, RESTRICTED_PHRASES[i]);
         containsRestrictedPhrase = true;
       }
     }
@@ -677,7 +677,8 @@ class Web3Connection extends React.Component<any, any> {
       });
 
       const haikuOptions = await axios.put(GENERATOR_URL_BASE + 'haiku', {
-        haikuTitle
+        haikuTitle,
+        address
       }).then(res => res.data.haikus)
         .catch(err => console.error('error occurred while saving to Arweave.'));
 
@@ -732,14 +733,16 @@ class Web3Connection extends React.Component<any, any> {
         result = await axios.put(GENERATOR_URL_BASE + 'arweave', {
           haikuTitle,
           haikuContent: chosenHaiku,
-          address
+          address,
+          checkWhitelist: true
         }).then(res => res.data)
           .catch(err => console.error('error occurred while saving to Arweave.'));
 
       } else {
         result = await axios.put(GENERATOR_URL_BASE + 'arweave', {
           haikuTitle,
-          haikuContent: chosenHaiku
+          haikuContent: chosenHaiku,
+          address
         }).then(res => res.data)
           .catch(err => console.error('error occurred while saving to Arweave.'));
 
