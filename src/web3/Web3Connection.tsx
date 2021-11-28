@@ -995,7 +995,7 @@ class Web3Connection extends React.Component<any, any> {
       <SLayout>
         <Column maxWidth={1000} spanHeight>
           {/* If on Rinkeby, don't show */}
-          {contractAddress.Token !== '0x81D426229DB3751D9aB471c98a56c04E2f8deabC' ? (
+          {contractAddress.Token !== '0xECb05FA9E91c9Eb4b34cf1bE10B6bA8774DE87aB' ? (
             <Header
               connected={connected}
               address={address}
