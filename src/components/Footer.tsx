@@ -6,6 +6,7 @@ export default function Footer() {
     return (
         <div style={{ textAlign: 'left', position: 'absolute', bottom: '0.25rem', width: '100%', height: '2rem' }}>
             <a href='/terms' style={{ paddingLeft: '1rem', paddingRight: '1rem'}}>Terms</a>
+            <a href='https://etherscan.io/token/0x60129872C5e9decAfa95f77fA6983182aA1a5E88' style={{ paddingLeft: '1rem', paddingRight: '1rem'}}>Contract</a>
             <IconButton href='https://twitter.com/aihaikuNFTs' target='_blank' aria-label="Twitter" color={'inherit'}>
                 <TwitterIcon fill="black" style={{ height: '4vh', maxHeight: '20px' }} />
             </IconButton>
