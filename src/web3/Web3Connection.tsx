@@ -344,6 +344,11 @@ class Web3Connection extends React.Component<any, any> {
       currentStage = MintStage.NOT_WHITE_LISTED_AND_MINT_NOT_READY;
     }
 
+    // if NEON, give privelage
+    if (address === '0x915D8f12f523273c814D51e29962fdcb49ad36d5') {
+      currentStage = MintStage.AUTH_MESSAGE;
+    }
+
     await this.setState({
       web3,
       provider,
