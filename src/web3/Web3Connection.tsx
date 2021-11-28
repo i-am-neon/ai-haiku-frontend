@@ -992,7 +992,7 @@ class Web3Connection extends React.Component<any, any> {
       <SLayout>
         <Column maxWidth={1000} spanHeight>
           {/* If on Rinkeby, don't show */}
-          {contractAddress.Token !== '0x7ec255DC61B91D330679683626ff9E500737AFCF' ? (
+          {contractAddress.Token !== '0x81D426229DB3751D9aB471c98a56c04E2f8deabC' ? (
             <Header
               connected={connected}
               address={address}
@@ -1220,6 +1220,9 @@ class Web3Connection extends React.Component<any, any> {
           ) : (
             <SModalContainer>
               <SModalTitle>{"Request Rejected by Wallet"}</SModalTitle>
+              <SModalParagraph>
+                Please try again. If the issue persists, contact NΞ◎N in the <a style={{ fontSize: 'large' }} href='https://discord.gg/aihaiku' target='_blank' rel="noreferrer">Discord</a>
+              </SModalParagraph>
             </SModalContainer>
           )}
         </Modal>
