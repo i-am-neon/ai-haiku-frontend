@@ -1037,7 +1037,7 @@ class Web3Connection extends React.Component<any, any> {
                         <p>
                           I'm terribly sorry, but you are not on the whitelist. If you believe
                           this is a mistake, please DM NΞ◎N in
-                          the <a style={{ fontSize: 'large' }} href='https://discord.gg/aihaiku' target='_blank' rel="noreferrer">Discord</a>.
+                          the <a style={{ fontSize: 'large' }} href='https://discord.gg/PAJjTrkkMy' target='_blank' rel="noreferrer">Discord</a>.
                           Otherwise, you may simply refresh the page when the public mint is open.
                         </p>
                         <PublicMintCountdown />
@@ -1224,7 +1224,7 @@ class Web3Connection extends React.Component<any, any> {
             <SModalContainer>
               <SModalTitle>{"Request Rejected by Wallet"}</SModalTitle>
               <SModalParagraph>
-                Please try again. If the issue persists, contact NΞ◎N in the <a style={{ fontSize: 'large' }} href='https://discord.gg/aihaiku' target='_blank' rel="noreferrer">Discord</a>
+                Please try again. If the issue persists, contact NΞ◎N in the <a style={{ fontSize: 'large' }} href='https://discord.gg/PAJjTrkkMy' target='_blank' rel="noreferrer">Discord</a>
               </SModalParagraph>
             </SModalContainer>
           )}
