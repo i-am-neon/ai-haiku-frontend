@@ -11,7 +11,7 @@ export default function Footer() {
             <IconButton href='https://twitter.com/aihaikuNFTs' target='_blank' aria-label="Twitter" color={'inherit'}>
                 <TwitterIcon fill="black" style={{ height: '4vh', maxHeight: '20px' }} />
             </IconButton>
-            <IconButton href="https://discord.gg/aihaiku" target='_blank' rel="noreferrer" aria-label="Discord" color={'inherit'}>
+            <IconButton href="https://discord.gg/PAJjTrkkMy" target='_blank' rel="noreferrer" aria-label="Discord" color={'inherit'}>
                 <DiscordIcon fill="black" style={{ height: '4vh', maxHeight: '20px' }} />
             </IconButton>
         </div>
