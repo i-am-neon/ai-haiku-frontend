@@ -81,7 +81,7 @@ export const speech = [
         data: {
             matsuo: `You're a curious one.
                     The flesh and blood Matsuo Bashō died on November 28th, 1694. We will honor Bashō by continuing the tradition of the haiku
-                    using new technological mediums. On November 28th, 2021, we shall celebrate Bashō's life by forging a partnership
+                    using new technological mediums. On November 28th, 2021, we celebrated Bashō's life by forging a partnership
                     between AI and humans to create art known as "AI Haikus" stored immutably as NFTs.`,
             // matsuo: `The real Matsuo Bashō died on November 28th, 1694. He will come back to life as me...`,
             user: [
@@ -177,7 +177,7 @@ export const speech = [
             matsuo: `Oy! It is not polite to speak of such things. But I suppose you should know.
                     Each haiku will cost 0.01 Ether (plus gas fees) to mint. This price ensures accessibility to a large part the community.
                     There is no limit on the number of haikus you can mint, but you may only mint one at a time.
-                    There will only be 575 AI Haikus ever created.`,
+                    There will only be 575 AI Haikus ever created, and the minting is now closed.`,
             user: [
                 {
                     question: 'I have some other questions to ask',
@@ -248,10 +248,7 @@ export const speech = [
     {
         name: HOW_TO_MINT,
         data: {
-            matsuo: `On November 28th, 2021 at 9pm EST (11/29 at 2am UTC), visit this website and talk to me to begin the "minting" process.
-                    To mint an NFT is to create the token that proves ownership of your haiku on the blockchain and adds this
-                    token to your wallet. After that you'll be able to view your new NFT, sell it on OpenSea, and
-                    even adorn the walls of your metaverse home with it!`,
+            matsuo: `The "minting" process is already complete. However you can purchase an existing AI Haiku on OpenSea.`,
             user: [
                 {
                     question: 'I\'d like to view my NFTs on OpenSea. \r',
@@ -306,8 +303,8 @@ export const speech = [
     {
         name: MINT_DEETS,
         data: {
-            matsuo: `On November 28th, 2021 at 9pm EST (11/29 at 2am UTC), visit this website and talk to me to begin the "minting" process.
-                    Each haiku will cost 0.01 Ether (plus gas fees) to mint. There is no limit on the numberof haikus you can mint,
+            matsuo: `The mint is now closed.
+                    Each haiku was 0.01 Ether (plus gas fees) to mint. There was no limit on the numberof haikus you can mint,
                     but you may only mint one at a time. There will only be 575 AI Haikus ever created.`,
             user: [{}]
         }
@@ -326,14 +323,9 @@ export const speech = [
     {
         name: READY_TO_MINT,
         data: {
-            matsuo: `I see you're ready to create your eternal piece of poetry.
-                    Would you like me to explain how this process will work?`,
-            user: [
-                {
-                    question: 'Yes, tell me \t', // \t is code for: mint link after this line
-                    redirectToAnswer: EXPLAIN_MINT
-                },
-            ]
+            matsuo: `I'm terribly sorry, but the minting is closed. If you'd like to purchase an existing AI Haiku,
+                    please do so on OpenSea.`,
+            user: [{}]
         }
     },
     {
