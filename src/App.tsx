@@ -9,6 +9,7 @@ import Footer from './components/Footer';
 import { isMobile, isSafari, isFirefox } from 'react-device-detect';
 import { PUBLIC_MINT_TIMESTAMP_MS } from './utils/envVariables';
 import MintCountdown from './components/MintCountdown';
+import MintClosed from './components/MintClosed';
 
 const Web3Connection = lazy(() => import('./web3/Web3Connection'));
 
@@ -41,7 +42,9 @@ export default class App extends React.Component<AppProps, AppState> {
   }
 
   isMintReady(): boolean {
-    return Date.now() >= PUBLIC_MINT_TIMESTAMP_MS;
+    // return Date.now() >= PUBLIC_MINT_TIMESTAMP_MS;
+    // Minting is now closed.
+    return false;
   }
 
   render() {
@@ -51,7 +54,8 @@ export default class App extends React.Component<AppProps, AppState> {
           <NavBar />
           <Suspense fallback={<></>}>
             <Switch>
-              <Route path='/mint' component={this.isMintReady() ? Web3Connection : MintCountdown}></Route>
+              {/* <Route path='/mint' component={this.isMintReady() ? Web3Connection : MintCountdown}></Route> */}
+              <Route path='/mint' component={this.isMintReady() ? Web3Connection : MintClosed}></Route>
               <Route path='/terms' component={TermsAndConditions}></Route>
               <Route path='/paper' component={Paper}></Route>
               <Route path='/' component={Home}></Route>
