@@ -84,8 +84,6 @@
     "@types/three": "^0.134.0"
   },
   "resolutions": {
-    "postcss": "8.4.31",
-    "postcss-safe-parser": "5.0.2",
-    "autoprefixer": "10.4.5"
+    "postcss-safe-parser/postcss": "7.0.39"
   }
 }
