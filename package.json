@@ -82,5 +82,8 @@
   },
   "devDependencies": {
     "@types/three": "^0.134.0"
+  },
+  "resolutions": {
+    "postcss": "^8.3.11"
   }
 }
